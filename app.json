@@ -1,0 +1,17 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ],
+  "description": "Create a community of like minded authors to foster inspiration and innovation by leveraging the modern web.",
+  "env": {
+  },
+  "formation": {
+  },
+  "name": "ivy-ah-backend",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
