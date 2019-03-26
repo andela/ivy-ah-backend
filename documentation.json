@@ -1,0 +1,107 @@
+{
+    "swagger": "2.0",
+    "info": {
+       "description": "This app brings together a of community of like minded authors to foster inspiration and innovation by leveraging the modern web.",
+       "version": "1.0.0",
+       "title": "Authors Haven",
+       "termsOfService": "http://andela.com",
+       "contact": {
+          "email": "info@andela.com"
+       },
+       "license": {
+          "name": "Apache 2.0",
+          "url": "https://ivy-ah-backend.herokuapp.com/"
+       }
+    },
+    "host": "ivy-ah-backend.herokuapp.com",
+    "basePath": "/api",
+    "tags": [
+       {
+          "name": "Users",
+          "description": "Authentication",
+          "externalDocs": {
+             "description": "",
+             "url": "https://ivy-ah-backend.herokuapp.com"
+          }
+       }
+    ],
+    "schemes": [
+       "https"
+    ],
+    "paths": {
+       "/Users": {
+          "post": {
+             "tags": [
+                "Users"
+             ],
+             "summary": "Log user into the app",
+             "description": "",
+             "operationId": "",
+             "consumes": [
+                "application/json"
+             ],
+             "produces": [
+                "application/json"
+             ],
+             "parameters": [
+                {
+                   "in": "body",
+                   "name": "body",
+                   "description": "json object of user details",
+                   "required": true,
+                   "schema": {
+                      "$ref": "#/definitions/userLogin"
+                   }
+                }
+             ],
+             "responses": {
+                "200": {
+                   "description": "success",
+                   "schema": {
+                      "$ref": "#/definitions/success"
+                   }
+                },
+                "400": {
+                   "description": "invalid request"
+                },
+                "401": {
+                   "description": "unauthorized"
+                }
+             }
+          }
+       }
+    },
+    "definitions": {
+       "userLogin": {
+          "type": "object",
+          "required": [
+             "email",
+             "password"
+          ],
+          "properties": {
+             "email": {
+                "type": "string",
+                "example": "mail@email.com"
+             },
+             "password": {
+                "type": "string",
+                "example": "yourPassword"
+             }
+          }
+       },
+       "success": {
+          "type": "object",
+          "properties": {
+             "status": {
+                "type": "integer",
+                "example": 200
+             },
+             "message": {
+                "type": "string",
+                "example": "successful"
+             }
+          }
+       }
+    }
+ }
+ 
