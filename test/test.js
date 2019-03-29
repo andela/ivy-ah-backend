@@ -1,5 +1,9 @@
+import dotenv from 'dotenv';
 import { expect } from 'chai';
 import joiValidator from '../src/middlewares/validator/validator';
+import authenticator from '../src/helpers/authenticator';
+
+dotenv.config();
 
 describe('test user signup/login validation', () => {
   it('validate successfully and return user object on signup', async () => {
@@ -78,5 +82,44 @@ describe('test user signup/login validation', () => {
         pass: 'pass is not allowed'
       });
     });
+  });
+});
+
+describe('test JWT authentication', () => {
+  it('generates a token with key provided', () => {
+    const jwt = authenticator.generateToken({ test: 'test' }, 'jwttesting');
+    expect(jwt).to.be.a('String');
+  });
+
+  it('generates a token without key provided', () => {
+    const jwt = authenticator.generateToken({
+      test: 'test'
+    });
+    expect(jwt).to.be.a('String');
+  });
+
+  it('verifies a token with key provided', () => {
+    const payload = { payload: 'payload' };
+    const jwt = authenticator.generateToken(payload, 'jwttesting');
+    const newPayload = authenticator.verifyToken(jwt, 'jwttesting');
+    expect(newPayload.payload).to.equal(payload.payload);
+  });
+
+  it('verifies a token without key provided', () => {
+    const payload = { payload: 'payload' };
+    const jwt = authenticator.generateToken(payload);
+    const newPayload = authenticator.verifyToken(jwt);
+    expect(newPayload.payload).to.equal(payload.payload);
+  });
+
+  it('throws an error on validation failure', () => {
+    const payload = { payload: 'payload' };
+    const jwt2 = authenticator.generateToken(payload, 'newkey');
+    try {
+      const newPayload = authenticator.verifyToken(jwt2);
+      expect(newPayload).to.be.undefined();
+    } catch (error) {
+      expect(error.name).to.equal('JsonWebTokenError');
+    }
   });
 });
