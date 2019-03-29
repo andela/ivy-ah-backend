@@ -1,18 +1,14 @@
+import 'dotenv/config';
 import { readdirSync } from 'fs';
-import { basename as _basename, resolve, join } from 'path';
+import { basename as _basename, join } from 'path';
 import Sequelize from 'sequelize';
+import User from './User';
 
 const basename = _basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = resolve('/../config/config.js')[env];
 const db = {};
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+
+const sequelize = new Sequelize({ config: process.env.DATABASE_URL, dialect: 'postgres' });
 
 readdirSync(__dirname)
   .filter((file) => {
@@ -32,5 +28,8 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+
+db.models = User;
 
 export default db;
