@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import { expect } from 'chai';
 import joiValidator from '../src/middlewares/validator/validator';
 import authenticator from '../src/helpers/authenticator';
+import PasswordHasher from '../src/helpers/PasswordHasher';
 
 dotenv.config();
 
@@ -121,5 +122,30 @@ describe('test JWT authentication', () => {
     } catch (error) {
       expect(error.name).to.equal('JsonWebTokenError');
     }
+  });
+});
+
+describe('Tests for password hashing functionality', () => {
+  it('successfully hashes a password', () => {
+    const password = '123456';
+    const hash = PasswordHasher.hashPassword(password);
+    expect(hash).to.be.a('String');
+  });
+
+  it('successfully verifies a password', () => {
+    const password = '123456';
+    const hash = PasswordHasher.hashPassword(password);
+    const isPassword = PasswordHasher.comparePassword(password, hash);
+    expect(isPassword).to.be.a('boolean');
+    expect(isPassword).to.equal(true);
+  });
+
+  it('returns false if the password and hash do not match', () => {
+    const password = '123456';
+    const wrongPassword = '12345';
+    const hash = PasswordHasher.hashPassword(password);
+    const isPassword = PasswordHasher.comparePassword(wrongPassword, hash);
+    expect(isPassword).to.be.a('boolean');
+    expect(isPassword).to.equal(false);
   });
 });
