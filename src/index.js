@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import { config } from 'dotenv';
 import morgan from 'morgan';
+import multer from 'multer';
 import router from './routes/api/users/usersRoute';
 
 config();
@@ -16,7 +17,7 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.use(multer().any());
 
 app.use('/api/v1', router);
 app.get('*', (req, res) => res.status(200).send({
