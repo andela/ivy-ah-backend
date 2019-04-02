@@ -7,6 +7,7 @@ import express from 'express';
 import { config } from 'dotenv';
 import morgan from 'morgan';
 import method from 'method-override';
+import multer from 'multer';
 
 config();
 
@@ -21,6 +22,7 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(multer().any());
 app.use(method());
 app.use(express.static(path.resolve(__dirname, '/public')));
 
