@@ -1,10 +1,16 @@
 import dotenv from 'dotenv';
+import assert from 'assert';
+import nock from 'nock';
+import supertest from 'supertest';
+
 import { expect } from 'chai';
+import app from '../src/index';
 import joiValidator from '../src/middlewares/validator/validator';
 import authenticator from '../src/helpers/authenticator';
 import PasswordHasher from '../src/helpers/PasswordHasher';
 
 dotenv.config();
+const api = supertest(app);
 
 describe('test user signup/login validation', () => {
   it('validate successfully and return user object on signup', async () => {
@@ -147,5 +153,36 @@ describe('Tests for password hashing functionality', () => {
     const isPassword = PasswordHasher.comparePassword(wrongPassword, hash);
     expect(isPassword).to.be.a('boolean');
     expect(isPassword).to.equal(false);
+  });
+});
+
+describe('unit testing /users route', () => {
+  describe('testing with a dummy json', () => {
+    const user = {
+      email: 'my@gmail.com', token: 'kaka', username: 'qwerty', bio: 'text', image: 'url'
+    };
+    before(() => {
+      nock('http://testwiththisurl.com')
+        .post('/users')
+        .reply(201, user);
+    });
+    it('should return the expected json response on success', async () => {
+      const response = await supertest(app)
+        .post('/users');
+      assert(response.statusCode, 201);
+      expect(user).to.have.all.keys('email', 'token', 'username', 'bio', 'image');
+      expect(user.token).to.be.a('string');
+    });
+    it('should return the expected response on failure', (done) => {
+      api.post('/users')
+        .expect(404)
+        .end((err, response) => {
+          expect(response.status).to.equal(404);
+          done();
+        });
+    });
+    after(() => {
+      nock.cleanAll();
+    });
   });
 });
