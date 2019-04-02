@@ -14,6 +14,70 @@ by leveraging the modern web.
 ## API Spec
 The preferred JSON object to be returned by the API should be structured as follows:
 
+
+### Author's Haven API on heroku
+[Author's Haven API](https://ivy-ah-backend.herokuapp.com/)
+
+### Author's Haven API documentation
+[Author's Haven documentation](https://ivy-ah-backend.herokuapp.com/api-docs)
+
+
+### How To Install and Run This Application on your Computer
+1. Download and install [GIT](https://git-scm.com/downloads), [NodeJs](https://nodejs.org/en/) and [Postgresql](https://www.postgresql.org/download/) on your computer
+2. Create a database with the name authorshaven (This will be part of DATABASE_URL in the .env file). 
+3. Clone this repository by running the following on your command line interface
+`
+git clone https://github.com/andela/ivy-ah-backend.git
+`
+4. Navigate to the directory where the app was cloned to with `cd ivy-ah-backend`
+5. Run `npm install` to install all dependencies
+6. Rename the `.env-example` file to `.env` and set all the environment variables
+7. For the SENDGRID_API_KEY variable, create an account on [Sendgrid](https://sendgrid.com/) to get the API KEY
+7. Finally Run `npm dev-start` to start the server. You now have a running copy of Author's Haven application :sparkles:
+
+### User Features
+Users can:
+- signup
+- Login
+- Create articles
+- Give rating to articles
+- Like articles 
+- Reset password
+- Highlight and comment on any text in the article
+- Like a specific comment
+- Report an article with inappropriate content
+- Share articles 
+- See time it takes to read an article
+- Tag their articles
+- See a list and profiles of existing authors
+- Bookmark articles
+- See their reading stats
+- Signup and login via Google, Facebook, and Twitter
+
+### Access Endpoints 
+- After setup you can access the base url on a browser through localhost:3000/
+- All other endpoints and request methods below can be accessed with [Postman Browser Extension](https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en) or [Postman Native app](https://www.getpostman.com/downloads/)
+
+### How to run unit tests
+To run tests on the app run:
+`
+npm run test
+`
+
+### Built With
+- Nodejs/Expressjs
+- Postgresql Database
+
+
+### Test Coverage Instrumentation and Report
+- [nyc](https://www.npmjs.com/package/nyc) 
+
+### Linting And Style Guide
+- Eslint(Airbnb style guide)
+
+### Continous Integration
+Travis-ci.org and HoudCi
+
 ### Users (for authentication)
 
 ```source-json
@@ -394,3 +458,6 @@ No additional parameters required
 ### Get Tags
 
 `GET /api/tags`
+
+### Authors
+This app was created by the ivy team
