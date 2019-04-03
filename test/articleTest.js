@@ -15,7 +15,7 @@ const user = {
 before(async () => {
   await models.sequelize.sync({ force: true });
   await server
-    .post('/api/v1/users')
+    .post('/api/v1/users/signup')
     .send(user);
 });
 
