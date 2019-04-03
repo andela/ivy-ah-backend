@@ -4,7 +4,7 @@ import express from 'express';
 import { config } from 'dotenv';
 import morgan from 'morgan';
 import multer from 'multer';
-import router from './routes/api/users/usersRoute';
+import router from './routes/api/index';
 
 config();
 

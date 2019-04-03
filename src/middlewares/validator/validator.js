@@ -12,9 +12,19 @@ const password = joi.string().trim().regex(/^[\w\W]{8,32}$/)
   .error(() => 'password must contain between 8 and 32 characters')
   .required();
 
+const article = joi.object().keys({
+  title: joi.string().required().error(() => 'Title is required'),
+  description: joi.string().required().error(() => 'description is required'),
+  body: joi.string().required().error(() => 'Body is required'),
+  author: joi.string().required().error(() => 'Author is required'),
+  tagList: joi.array().optional().error(() => 'tagList must be an array '),
+  rawtext: joi.string().optional().error(() => 'Please enter string for rawtext')
+});
+
 const schemas = {
   userLogin: joi.object().keys({ email, password }),
-  userSignup: joi.object().keys({ username, email, password })
+  userSignup: joi.object().keys({ username, email, password }),
+  articles: joi.object().keys({ article })
 };
 
 /**
