@@ -38,5 +38,10 @@ describe('Article', () => {
     expect(result.body).to.be.an('object');
     expect(result.body).to.have.property('article');
     expect(result.body.article).to.have.property('slug');
+    expect(result.body.article).to.have.property('readtime');
+    expect(result.body.article).to.have.property('title');
+    expect(result.body.article).to.have.property('author');
+    expect(result.body.article).to.have.property('description');
+    expect(result.body.article).to.have.property('tagList');
   });
 });
