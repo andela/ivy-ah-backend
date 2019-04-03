@@ -22,12 +22,18 @@ const sendMail = (userEmail, emailSubject, html) => {
   };
   return sendgridMail.send(message)
     .then(() => {
-      const mailSent = true;
+      const mailSent = {
+        status: 200,
+        message: 'Email successfully sent'
+      };
       return mailSent;
     })
     .catch(() => {
-      const mailNotSent = false;
-      return mailNotSent;
+      const errorMessage = {
+        status: 400,
+        error: 'Unable to send email'
+      };
+      return errorMessage;
     });
 };
 

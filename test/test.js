@@ -8,6 +8,7 @@ import app from '../src/index';
 import joiValidator from '../src/middlewares/validator/validator';
 import authenticator from '../src/helpers/authenticator';
 import PasswordHasher from '../src/helpers/PasswordHasher';
+import emailer from '../src/helpers/emailSender';
 
 dotenv.config();
 const api = supertest.agent(app);
@@ -184,5 +185,18 @@ describe('unit testing /users route', () => {
     after(() => {
       nock.cleanAll();
     });
+  });
+});
+
+describe('Tests email sender module', () => {
+  it('Should return a success message if email is successfully sent', async () => {
+    const result = await emailer('kayroy247@gmail', 'Welcome', 'Welcome user');
+    expect(result).to.be.an('object');
+    expect(result).not.to.be.an('string');
+    expect(result).to.have.property('message');
+    expect(result).to.have.property('status')
+      .to.be.equals(200);
+    expect(result.message).to.be.equals('Email successfully sent');
+    expect(result.message).to.be.a('string');
   });
 });
