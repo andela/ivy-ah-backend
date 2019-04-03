@@ -53,6 +53,57 @@ class User {
       });
     }
   }
+
+  /**
+   * method to handle user login
+   * @param {Request} req object
+   * @param {Response} res object
+   * @returns {void} void
+   * @memberof User
+   */
+  static async userLogin(req, res) {
+    const {
+      email,
+      password
+    } = req.body;
+    try {
+      const result = await db.user
+        .findOne({
+          attributes: ['password', 'email', 'username', 'bio', 'image'],
+          where: { email },
+        });
+      if (!result) {
+        return res.status(400).json({
+          status: 400,
+          error: 'email or password incorrect'
+        });
+      }
+      if (!PasswordHasher.comparePassword(password, result.password)) {
+        return res.status(400).json({
+          status: 400,
+          error: 'email or password incorrect'
+        });
+      }
+
+      const token = await authenticator.generateToken({ email: result.email });
+      return res.status(200).json({
+        status: 200,
+        user: {
+          email,
+          token,
+          username: result.username,
+          bio: result.bio,
+          image: result.image
+        },
+      });
+    } catch (err) {
+      res.status(500).json({
+        status: 500,
+        error: 'unexpected server error'
+      });
+    }
+  }
 }
-const { userSignup } = User;
-export default userSignup;
+
+const { userSignup, userLogin } = User;
+export { userSignup, userLogin };
