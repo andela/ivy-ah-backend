@@ -16,6 +16,7 @@
     "@babel/core": "^7.4.0",
     "@babel/register": "^7.4.0",
     "bcrypt": "^3.0.5",
+    "@sendgrid/mail": "^6.3.1",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.14.0",
     "cors": "^2.8.4",
