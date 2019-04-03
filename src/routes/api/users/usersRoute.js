@@ -5,6 +5,6 @@ import auth from './auth';
 
 const usersRoute = express.Router();
 
-usersRoute.post('/users', validate.userSignup, auth);
+usersRoute.post('/', validate.userSignup, auth);
 
 export default usersRoute;

@@ -10,7 +10,7 @@ import authenticator from '../src/helpers/authenticator';
 import PasswordHasher from '../src/helpers/PasswordHasher';
 
 dotenv.config();
-const api = supertest(app);
+const api = supertest.agent(app);
 
 describe('test user signup/login validation', () => {
   it('validate successfully and return user object on signup', async () => {
