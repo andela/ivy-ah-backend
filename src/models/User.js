@@ -43,6 +43,7 @@ const user = (sequelize, DataTypes) => {
   }, {});
   users.associate = (models) => {
     users.hasMany(models.articles);
+    users.hasMany(models.following);
   };
 
   return users;

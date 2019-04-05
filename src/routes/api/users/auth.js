@@ -113,7 +113,16 @@ class User {
   static async getAUser(request, response) {
     try {
       const { email } = request.params;
-      const result = await db.user.findByPk(email.trim());
+      const result = await db.user.findByPk({
+        include: [{
+          model: db.following,
+          as: 'following',
+          where: {
+            author: 'dkjndkl@kkd.com'
+          }
+        }]
+      });
+      const result = await db.Sequelize.query('select first_name, email,  from users where email = $1 ')
       if (result) {
         response.status(200).json({
           status: 200,
