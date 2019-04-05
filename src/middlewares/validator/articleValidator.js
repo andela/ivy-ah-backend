@@ -16,8 +16,25 @@ export default class ArticleValidator {
  * @return { void }
  * @memberof ArticleValidator
  */
-  static createArticle(req, res, next) {
+  static validateArticle(req, res, next) {
     validator(req.body, 'articles').then(next())
+      .catch(error => res.status(422).json({
+        status: 422, error,
+      }));
+  }
+
+  /**
+ *
+ *
+ * @static
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @memberof ArticleValidator
+ * @return {void}
+ */
+  static validateArticleRating(req, res, next) {
+    validator(req.body, 'rating').then(next())
       .catch(error => res.status(422).json({
         status: 422, error,
       }));

@@ -8,7 +8,7 @@ const basename = _basename(__filename);
 const db = {};
 
 
-const sequelize = new Sequelize({ config: process.env.DATABASE_URL, dialect: 'postgres' });
+const sequelize = new Sequelize(process.env.DATABASE_URL);
 
 readdirSync(__dirname)
   .filter((file) => {

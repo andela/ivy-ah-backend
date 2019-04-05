@@ -2,10 +2,12 @@ import { Router } from 'express';
 import articleValidator from '../../../middlewares/validator/articleValidator';
 import articleController from './articleController';
 
-const { createArticle } = articleValidator;
-const { create } = articleController;
-const articleRoute = Router();
+const { validateArticle, validateArticleRating } = articleValidator;
+const { create, rate } = articleController;
+const articleRouter = Router();
 
-articleRoute.post('/', createArticle, create);
+articleRouter.post('/', validateArticle, create);
 
-export default articleRoute;
+articleRouter.post('/rating', validateArticleRating, rate);
+
+export default articleRouter;

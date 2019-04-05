@@ -21,10 +21,20 @@ const article = joi.object().keys({
   rawtext: joi.string().optional().error(() => 'Please enter string for rawtext')
 });
 
+const rating = joi.object().keys({
+  article: joi.string().required().error(() => 'article is required'),
+  user: joi.string().required().error(() => 'user is required'),
+  rate: joi.number().integer().max(5).min(0)
+    .error(() => 'rating cannot be more than 5')
+    .required()
+    .error(() => 'rating is required but cannot less than 0 or more than 5'),
+});
+
 const schemas = {
   userLogin: joi.object().keys({ email, password }),
   userSignup: joi.object().keys({ username, email, password }),
-  articles: joi.object().keys({ article })
+  articles: joi.object().keys({ article }),
+  rating: joi.object().keys({ rating }),
 };
 
 /**
