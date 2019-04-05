@@ -22,6 +22,14 @@ const body = joi.string().required().error(() => 'Body is required');
 const tagList = joi.array().optional().error(() => 'tagList must be an array ');
 const plainText = joi.string().optional().error(() => 'Plain text should be a string');
 
+const keyword = joi.string()
+  .error(() => 'keyword must be a string');
+
+const tags = joi.array()
+  .error(() => 'tags must be an array containing only strings');
+
+const author = joi.string()
+  .error(() => 'author must be a string');
 
 const schemas = {
   userLogin: joi.object().keys({ email, password }),
@@ -31,6 +39,7 @@ const schemas = {
   }),
   forgotPassword: joi.object().keys({ email }),
   resetPassword: joi.object().keys({ password, resetToken }),
+  articleSearch: joi.object().keys({ keyword, tags, author }).or(['keyword', 'tags', 'author']).error(() => 'a valid search parameter must be provided')
 };
 
 /**
@@ -47,9 +56,9 @@ const validator = (object, schemaName) => new Promise((res, rej) => {
     .catch(({ details }) => {
       const obj = {};
       details.forEach(({ context, message }) => {
-        obj[context.key] = message.replace(/"/g, '');
+        if (context.key) obj[context.key] = message.replace(/"/g, '');
       });
-      rej(obj);
+      rej(Object.keys(obj)[0] ? obj : details[0].message);
     });
 });
 

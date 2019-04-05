@@ -57,3 +57,47 @@ describe('Article', () => {
     expect(result.body).to.have.property('error');
   });
 });
+
+describe('artilce search', () => {
+  it('return a result after the search', async () => {
+    await server
+      .post('/api/v1/articles')
+      .set('authorization', testToken)
+      .send({
+        description: 'this is the new description',
+        title: 'this is the true new title of the article',
+        body: 'this is the new body of the body',
+        tagList: ['thoisfd'],
+        plainText: 'jsjfosdf',
+      })
+      .expect(201);
+
+    await server
+      .post('/api/v1/articles')
+      .set('authorization', testToken)
+      .send({
+        description: 'this is the new description',
+        title: 'this is the true new title of the article',
+        body: 'this is the new body of the body',
+        tagList: ['thoisfd'],
+        plainText: 'jsjfosdf',
+      })
+      .expect(201);
+
+    const result = await server.get('/api/v1/articles/search').send({
+      tags: ['thoisfd']
+    }).expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body.parameters.tags).to.deep.equal(['thoisfd']);
+    expect(result.body.data[0].title).to.deep.equal('this is the true new title of the article');
+    expect(result.body.data[0].description).to.equal('this is the new description');
+  });
+
+  it('return an error on failed validation', async () => {
+    const result = await server.get('/api/v1/articles/search').send({
+      keyword: 15
+    }).expect(422);
+    expect(result.status).to.equal(422);
+    expect(result.body.error.keyword).to.deep.equal('keyword must be a string');
+  });
+});
