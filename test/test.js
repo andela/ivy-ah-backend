@@ -257,3 +257,13 @@ describe('Test for user Login', () => {
     expect(result.body.user).to.have.property('username');
   });
 });
+
+describe('Test for get a user functionality', () => {
+  it('should get a user', (done) => {
+    api.get('/api/v1/profile/remedevs@gmail.com')
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        done();
+      });
+  });
+});

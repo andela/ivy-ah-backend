@@ -1,4 +1,3 @@
-/* eslint-disable no-prototype-builtins */
 import db from '../../../models/index';
 import authenticator from '../../../helpers/authenticator';
 import PasswordHasher from '../../../helpers/PasswordHasher';
@@ -103,7 +102,69 @@ class User {
       });
     }
   }
+
+  /**
+   * method for handling get user details
+   * @param {Request} request
+   * @param {Request} response
+   * @returns {void} void
+   * @memberof User
+   */
+  static async getAUser(request, response) {
+    try {
+      const { email } = request.params;
+      const result = await db.user.findByPk(email.trim());
+      if (result) {
+        response.status(200).json({
+          status: 200,
+          result,
+        });
+      }
+      if (!result) {
+        response.status(409).json({
+          status: 409,
+          errors: 'User not found',
+        });
+      }
+    } catch (err) {
+      return response.status(500).json({
+        status: 500,
+        errors: { body: [err.message] },
+      });
+    }
+  }
+
+  /**
+   * method for handling updating
+   * @param {Request} request
+   * @param {Request} response
+   * @returns {void} void
+   * @memberof User
+   */
+  static async updateUser(request, response) {
+    const token = request.headers.authorization || request.body.token || request.headers.token;
+
+    const { email } = await authenticator.verifyToken(token);
+    const result = await db.user.findByPk(email);
+    if (!result) {
+      return response.status(404).json({
+        status: 404,
+      });
+    }
+    if (result) {
+      const update = await db.user.update(
+        request.body,
+        { returning: true, where: { email } }
+      );
+      return response.status(200).json({
+        status: 200,
+        user: update
+      });
+    }
+  }
 }
 
-const { userSignup, userLogin } = User;
-export { userSignup, userLogin };
+
+export const {
+  userSignup, userLogin, getAUser, updateUser
+} = User;
