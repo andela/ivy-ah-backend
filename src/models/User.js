@@ -40,7 +40,10 @@ const user = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true
     },
-  }, { indexes: [{ unique: true, fields: ['email', 'username'] }] });
+  }, {});
+  users.associate = (models) => {
+    users.hasMany(models.articles);
+  };
 
   return users;
 };
