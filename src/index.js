@@ -25,5 +25,3 @@ app.get('*', (req, res) => res.status(200).send({
 }));
 // finally, let's start our server...
 app.listen(process.env.PORT || 3000);
-
-export default app;

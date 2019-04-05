@@ -57,3 +57,29 @@ describe('Article', () => {
     expect(result.body).to.have.property('error');
   });
 });
+
+describe('Test for rating articles', () => {
+  before(async () => {
+    await models.sequelize.sync({ force: true });
+    await server
+      .post('/api/v1/articles')
+      .send({
+        description: 'the begining',
+        title: 'the dawn of civilization',
+        body: 'this is how civilization began',
+        tagList: ['history'],
+        rawtext: 'howcivilizations',
+        author: 'jake@gmail.com',
+      });
+  });
+  it('should return 200 if rating is successful ', async () => {
+    const result = await server
+      .post('/api/v1/articles/rating')
+      .send({
+        user,
+
+      });
+    expect(result.status).to.be.equal(201);
+  });
+  it('');
+});
