@@ -43,14 +43,14 @@ class validate {
  *
  *
  * @static
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @param {Request} req
+ * @param {Response} res
+ * @param {function} next
  * @return { void }
- * @memberof ArticleValidator
+ * @memberof validate
  */
-  static createArticle(req, res, next) {
-    validator(req.body, 'articles').then(next())
+  static validateArticle(req, res, next) {
+    validator(req.body, 'articles').then(() => next())
       .catch(error => res.status(422).json({
         status: 422, error,
       }));

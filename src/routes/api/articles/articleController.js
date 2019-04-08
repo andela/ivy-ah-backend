@@ -1,6 +1,5 @@
 import generateSlug from '../../../helpers/slugGenerator';
 import models from '../../../models';
-import calculateReadTime from '../../../helpers/articleReadTime';
 
 const { articles } = models;
 /**
@@ -19,21 +18,20 @@ export default class Article {
  * @memberof Articles
  * @returns {void}
  */
-  static async create(request, response) {
+  static async createArticle(request, response) {
     try {
       const {
-        title, body, description, tagList, author
-      } = request.body.article;
+        title, body, description, tagList, plainText
+      } = request.body;
       const slug = generateSlug(title);
-      const readtime = parseInt(calculateReadTime(body), 10);
       const result = await articles.create({
         slug,
         title,
         body,
         description,
         tagList,
-        author,
-        readtime
+        plainText,
+        author: request.user.email
       });
       if (result) {
         const { dataValues } = result;
