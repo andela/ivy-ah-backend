@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     readtime: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
     tagList: {
       type: DataTypes.ARRAY(DataTypes.STRING),
