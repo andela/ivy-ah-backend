@@ -1,5 +1,5 @@
-const user = (sequelize, DataTypes) => {
-  const users = sequelize.define('user', {
+module.exports = (sequelize, DataTypes) => {
+  const users = sequelize.define('users', {
     username: {
       type: DataTypes.STRING(50),
       unique: {
@@ -43,10 +43,8 @@ const user = (sequelize, DataTypes) => {
   }, {});
   users.associate = (models) => {
     users.hasMany(models.articles);
-    users.hasMany(models.following);
+    users.hasMany(models.followings);
   };
 
   return users;
 };
-
-export default user;

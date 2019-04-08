@@ -112,7 +112,7 @@ class User {
    */
   static async getAUser(request, response) {
     try {
-      const { email } = request.params;
+      // const { email } = request.params;
       const result = await db.user.findByPk({
         include: [{
           model: db.following,
@@ -122,7 +122,6 @@ class User {
           }
         }]
       });
-      const result = await db.Sequelize.query('select first_name, email,  from users where email = $1 ')
       if (result) {
         response.status(200).json({
           status: 200,
@@ -151,23 +150,25 @@ class User {
    * @memberof User
    */
   static async updateUser(request, response) {
-    const token = request.headers.authorization || request.body.token || request.headers.token;
+    try {
+      const token = request.headers.authorization || request.body.token || request.headers.token;
 
-    const { email } = await authenticator.verifyToken(token);
-    const result = await db.user.findByPk(email);
-    if (!result) {
-      return response.status(404).json({
-        status: 404,
-      });
-    }
-    if (result) {
-      const update = await db.user.update(
-        request.body,
-        { returning: true, where: { email } }
-      );
-      return response.status(200).json({
-        status: 200,
-        user: update
+      const { email } = await authenticator.verifyToken(token);
+      const result = await db.user.findByPk(email);
+      if (result) {
+        const update = await db.user.update(
+          request.body,
+          { returning: true, where: { email } }
+        );
+        return response.status(200).json({
+          status: 200,
+          user: update
+        });
+      }
+    } catch (err) {
+      return response.status(500).json({
+        status: 500,
+        errors: { body: [err.message] },
       });
     }
   }

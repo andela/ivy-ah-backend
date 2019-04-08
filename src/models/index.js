@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { readdirSync } from 'fs';
 import { basename as _basename, join } from 'path';
 import Sequelize from 'sequelize';
-import User from './User';
+import User from './users';
 
 const basename = _basename(__filename);
 const db = {};
