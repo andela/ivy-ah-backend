@@ -8,7 +8,7 @@ const { articles } = models;
  * @export
  * @class Articles
  */
-export default class Article {
+class Article {
 /**
  *
  *
@@ -48,3 +48,5 @@ export default class Article {
     }
   }
 }
+
+export default Article;

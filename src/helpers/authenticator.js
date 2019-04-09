@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
  * Handles jwt signing and verification
  * @class authenticator
  */
-class authenticator {
+class Authenticator {
   /**
    * signs and generates a jwt token from a payload using either the
    * provided key or JWT_SECRET
@@ -35,4 +35,4 @@ class authenticator {
   }
 }
 
-export default authenticator;
+export default Authenticator;

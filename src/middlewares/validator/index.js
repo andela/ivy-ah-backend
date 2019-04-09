@@ -4,7 +4,7 @@ import validator from './validator';
  * contains static methods for validation user inputs
  * @class validate
  */
-class validate {
+class Validate {
   /**
    * middleware for handling login data validation
    * passes over duty to next middleware on success or sends
@@ -111,4 +111,4 @@ class validate {
   }
 }
 
-export default validate;
+export default Validate;
