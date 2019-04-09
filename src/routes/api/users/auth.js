@@ -3,7 +3,6 @@ import db from '../../../models/index';
 import authenticator from '../../../helpers/authenticator';
 import PasswordHasher from '../../../helpers/PasswordHasher';
 
-
 /**
  *
  * contains static methods for creating a user
@@ -39,17 +38,25 @@ class User {
           image,
           password: hashedPassword,
         });
-      const token = await authenticator.generateToken({ email: result.email });
+      const token = await authenticator.generateToken({
+        email: result.email
+      });
       return response.status(201).json({
         status: 201,
         user: {
-          email, token, username, bio, image,
+          email,
+          token,
+          username,
+          bio,
+          image,
         },
       });
     } catch (err) {
       return response.status(409).json({
         status: 409,
-        errors: { body: [err.message] },
+        errors: {
+          body: [err.message]
+        },
       });
     }
   }
@@ -105,5 +112,7 @@ class User {
   }
 }
 
-const { userSignup, userLogin } = User;
-export { userSignup, userLogin };
+export const {
+  userSignup,
+  userLogin,
+} = User;

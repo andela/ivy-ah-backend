@@ -11,6 +11,9 @@ const email = joi.string().email()
 const password = joi.string().trim().regex(/^[\w\W]{8,32}$/)
   .error(() => 'password must contain between 8 and 32 characters')
   .required();
+const resetToken = joi.string().trim().regex(/^[\w\W]+\.[\w\W]+\.[\w\W]+$/)
+  .error(() => 'The password reset link has expired, kindly request for a new reset link')
+  .required();
 
 
 const title = joi.string().required().error(() => 'Title is required');
@@ -25,7 +28,9 @@ const schemas = {
   userSignup: joi.object().keys({ username, email, password }),
   articles: joi.object().keys({
     title, description, body, tagList, plainText
-  })
+  }),
+  forgotPassword: joi.object().keys({ email }),
+  resetPassword: joi.object().keys({ password, resetToken }),
 };
 
 /**
