@@ -76,7 +76,7 @@ class User {
     try {
       const user = await db.users
         .findOne({
-          attributes: ['password', 'email', 'username', 'bio', 'image'],
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
           where: { email },
         });
       if (!user) {
@@ -93,11 +93,12 @@ class User {
       }
 
       const token = await authenticator.generateToken({
-        email: user.email, userid: user.userid, role: user.userid
+        email: user.email, id: user.id, role: user.role
       });
       return res.status(200).json({
         status: 200,
         user: {
+          id: user.id,
           email,
           token,
           username: user.username,
