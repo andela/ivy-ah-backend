@@ -79,4 +79,14 @@ describe('Test for user Login', () => {
     expect(result.body.users[0]).to.have.property('username')
       .to.be.equals('kisses');
   });
+  it('should return 404 for unexisting endpoints', async () => {
+    const response = await supertest(app)
+      .get('/api/v1/notfound');
+    expect(response.body).to.be.an('object');
+    expect(response).to.have.property('status')
+      .to.be.equals(404);
+    expect(response.body).to.have.property('error')
+      .to.be.a('string');
+    expect(response.body.error).to.be.equal('Resource Not Found');
+  });
 });
