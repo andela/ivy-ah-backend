@@ -8,7 +8,7 @@ const basename = _basename(__filename);
 const db = {};
 let sequelize;
 if (process.env.NODE_ENV === 'test') {
-  sequelize = new Sequelize(process.env.DATABASE_URL, { dialect: 'postgres' });
+  sequelize = new Sequelize(process.env.TEST_DATABASE_URL, { dialect: 'postgres' });
 } else {
   sequelize = new Sequelize(process.env.DATABASE_URL, { dialect: 'postgres' });
 }

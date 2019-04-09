@@ -12,7 +12,8 @@ const user = {
 };
 
 let testToken;
-let testArticle;
+let articleId;
+
 before(async () => {
   await models.sequelize.sync({ force: true });
   const result = await server
@@ -42,7 +43,7 @@ describe('Article', () => {
     expect(result.body.article).to.have.property('author');
     expect(result.body.article).to.have.property('description');
     expect(result.body.article).to.have.property('tagList');
-    testArticle = result.body.article.id;
+    articleId = result.body.article.id;
   });
 
   it('should throw an error is required request field are not provided', async () => {
@@ -127,7 +128,7 @@ describe('Article rating', () => {
       .post('/api/v1/articles/rating')
       .set('authorization', testToken)
       .send({
-        articleId: `${testArticle}`,
+        articleId: `${articleId}`,
         rating: 4
       })
       .expect(201);
@@ -144,7 +145,7 @@ describe('Article rating', () => {
       .post('/api/v1/articles/rating')
       .set('authorization', testToken)
       .send({
-        articleId: `${testArticle}`,
+        articleId: `${articleId}`,
         rating: 4
       })
       .expect(200);
@@ -160,7 +161,7 @@ describe('Article rating', () => {
       .post('/api/v1/articles/rating')
       .set('authorization', testToken)
       .send({
-        articleId: `${testArticle}`,
+        articleId: `${articleId}`,
         rating: 3
       });
     expect(result.status).to.equal(200);
@@ -186,12 +187,66 @@ describe('Article rating', () => {
 
   it('should get the total rating of an article', async () => {
     const result = await server
-      .get(`/api/v1/articles/rating/${testArticle}`)
+      .get(`/api/v1/articles/rating/${articleId}`)
       .set('authorization', testToken)
       .expect(200);
     expect(result.status).to.equal(200);
     expect(result.body.data).to.be.an('object');
     expect(result.body.data).to.have.property('totalRating');
     expect(result.body.data).to.have.property('articleId');
+  });
+});
+
+describe('article like', () => {
+  it('it should like an article', async () => {
+    const result = await server
+      .put(`/api/v1/articles/likes/${articleId}/like`)
+      .set('authorization', testToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('data');
+    expect(result.body.data.option).to.equal(true);
+    expect(result.body.data.likes).to.equal('1');
+    expect(result.body.data.dislikes).to.equal(null);
+  });
+
+  it('it should remove a previous like an article', async () => {
+    const result = await server
+      .put(`/api/v1/articles/likes/${articleId}/like`)
+      .set('authorization', testToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('data');
+    expect(result.body.data.option).to.equal(null);
+    expect(result.body.data.likes).to.equal(null);
+    expect(result.body.data.dislikes).to.equal(null);
+  });
+
+  it('it should dislike an article', async () => {
+    const result = await server
+      .put(`/api/v1/articles/likes/${articleId}/dislike`)
+      .set('authorization', testToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('data');
+    expect(result.body.data.option).to.equal(false);
+    expect(result.body.data.likes).to.equal(null);
+    expect(result.body.data.dislikes).to.equal('1');
+  });
+
+  it('it should remove a previous dislike an article', async () => {
+    const result = await server
+      .put(`/api/v1/articles/likes/${articleId}/dislike`)
+      .set('authorization', testToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('data');
+    expect(result.body.data.option).to.equal(null);
+    expect(result.body.data.likes).to.equal(null);
+    expect(result.body.data.dislikes).to.equal(null);
   });
 });
