@@ -8,7 +8,7 @@ import PasswordHasher from '../../../helpers/PasswordHasher';
  * contains static methods for creating a user
  * @class User
  */
-class User {
+class Auth {
   /**
    * method for handling user signup
    * @param {Request} request object
@@ -149,4 +149,4 @@ class User {
   }
 }
 
-export const { userSignup, userLogin, socialAuth } = User;
+export const { userSignup, userLogin, socialAuth } = Auth;

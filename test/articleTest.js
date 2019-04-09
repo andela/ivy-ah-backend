@@ -21,7 +21,7 @@ before(async () => {
 });
 
 describe('Article', () => {
-  it('SHOULD CREATE AN ARTICLE', async () => {
+  it('should create an article', async () => {
     const result = await server
       .post('/api/v1/articles')
       .set('authorization', testToken)
@@ -43,7 +43,7 @@ describe('Article', () => {
     expect(result.body.article).to.have.property('tagList');
   });
 
-  it('SHOULD THROW AN ERROR IS REQUIRED REQUEST FIELD ARE NOT PROVIDED', async () => {
+  it('should throw an error is required request field are not provided', async () => {
     const result = await server
       .post('/api/v1/articles')
       .set('authorization', testToken)

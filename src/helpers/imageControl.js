@@ -22,7 +22,7 @@ const extractId = url => /v\d+\/([\w\W]+)\.\w+$/.exec(url)[1];
  * @method uploadImage
  * @method deleteImage
  */
-class imageControl {
+class ImageControl {
   /**
    * uploads an image file to cloudinary
    * @static
@@ -66,4 +66,4 @@ class imageControl {
   }
 }
 
-export default imageControl;
+export default ImageControl;
