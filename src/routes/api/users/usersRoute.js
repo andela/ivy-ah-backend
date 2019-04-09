@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from 'passport';
 import {
   userSignup,
   userLogin
@@ -15,5 +16,22 @@ usersRoute.post('/login', validate.userLogin, userLogin);
 usersRoute.post('/forgotpassword', validate.forgotPassword, sendPasswordResetToken);
 usersRoute.patch('/resetpassword', validate.resetPassword, resetPassword);
 usersRoute.get('/', checkToken, Users.getAllUsers);
+usersRoute.get('/home', (req, res) => {
+  res.send('every damn thing is working fine');
+});
+usersRoute.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+usersRoute.get('/twitter', passport.authenticate('twitter'));
+usersRoute.get('/google', passport.authenticate('google', {
+  scope: ['profile', 'email']
+}));
+usersRoute.get('/facebookRedirect', passport.authenticate('facebook'), (req, res) => {
+  res.redirect(`/api/v1/home?token=${req.user.token}`);
+});
+usersRoute.get('/twitterRedirect', passport.authenticate('twitter'), (req, res) => {
+  res.redirect(`/api/v1/users/home?token=${req.user.token}`);
+});
+usersRoute.get('/googleRedirect', passport.authenticate('google'), (req, res) => {
+  res.redirect(`/api/v1/home?token=${req.user.token}`);
+});
 
 export default usersRoute;

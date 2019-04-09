@@ -1,10 +1,13 @@
 import bodyParser from 'body-parser';
+import passport from 'passport';
+import session from 'express-session';
 import cors from 'cors';
 import express from 'express';
 import { config } from 'dotenv';
 import morgan from 'morgan';
 import multer from 'multer';
 import router from './routes/api/index';
+import './config/socialAuth';
 
 config();
 
@@ -18,6 +21,14 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(multer().any());
+app.use(passport.initialize());
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
+app.use(passport.session());
 
 app.use('/api/v1', router);
 app.get('*', (req, res) => res.status(200).send({

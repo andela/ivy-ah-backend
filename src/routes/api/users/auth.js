@@ -110,9 +110,43 @@ class User {
       });
     }
   }
+
+  /**
+ * method for checking if user is already registered
+ * @param {String} email user email
+ * @param {String} username user email
+ * @returns {Boolean} query result
+ * @memberof User
+ */
+  static async socialAuth(email, username) {
+    const [result] = await db.user
+      .findAll({
+        where: {
+          email
+        }
+      });
+    if (result) {
+      const token = await authenticator.generateToken({ email });
+      const userDetails = {
+        email,
+        token,
+        username: result.username,
+        bio: result.bio,
+        image: result.image
+      };
+      return userDetails;
+    }
+    const password = Math.random().toString();
+    const hashedPassword = await PasswordHasher.hashPassword(password);
+    await db.user
+      .create({
+        username,
+        email,
+        password: hashedPassword,
+      });
+    const token = await authenticator.generateToken({ email });
+    return { username, email, token };
+  }
 }
 
-export const {
-  userSignup,
-  userLogin,
-} = User;
+export const { userSignup, userLogin, socialAuth } = User;
