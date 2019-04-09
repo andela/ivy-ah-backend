@@ -31,10 +31,22 @@ app.use(session({
 app.use(passport.session());
 
 app.use('/api/v1', router);
-app.get('*', (req, res) => res.status(200).send({
-  message: 'Welcome to the beginning of nothingness.',
-}));
-// finally, let's start our server...
+
+
+app.use((req, res, next) => {
+  const error = new Error('Resource Not Found');
+  error.status = 404;
+  next(error);
+});
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500)
+    .json({
+      status: err.status,
+      error: err.message
+    });
+});
+
 app.listen(process.env.PORT || 3000);
 
 export default app;
