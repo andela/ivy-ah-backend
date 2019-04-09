@@ -78,8 +78,7 @@ class validate {
   }
 
   /**
- *
- *
+ *  middleware for handling validation on article creation
  * @static
  * @param {Request} req
  * @param {Response} res
@@ -89,6 +88,23 @@ class validate {
  */
   static validateArticle(req, res, next) {
     validator(req.body, 'articles').then(() => next())
+      .catch(error => res.status(422).json({
+        status: 422,
+        error,
+      }));
+  }
+
+  /**
+  *  middleware for handling validation on article search
+  * @static
+  * @param {Request} req request object
+  * @param {Response} res response object
+  * @param {Next} next called on validation success
+  * @return {void} void
+  * @memberof validate
+  */
+  static validateArticleSearch(req, res, next) {
+    validator(req.body, 'articleSearch').then(() => next())
       .catch(error => res.status(422).json({
         status: 422, error,
       }));
