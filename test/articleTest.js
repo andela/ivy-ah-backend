@@ -11,37 +11,49 @@ const user = {
   username: 'edosa',
 };
 
-
+let testToken;
 before(async () => {
   await models.sequelize.sync({ force: true });
-  await server
+  const result = await server
     .post('/api/v1/users/signup')
     .send(user);
+  testToken = result.body.user.token;
 });
 
 describe('Article', () => {
   it('SHOULD CREATE AN ARTICLE', async () => {
     const result = await server
       .post('/api/v1/articles')
+      .set('authorization', testToken)
       .send({
-        article: {
-          description: 'this is the new description',
-          title: 'this is the true new title of the article',
-          body: 'this is the new body of the body',
-          tagList: ['thoisfd'],
-          rawtext: 'jsjfosdf',
-          author: 'edosa@gmail.com',
-        }
+        description: 'this is the new description',
+        title: 'this is the true new title of the article',
+        body: 'this is the new body of the body',
+        tagList: ['thoisfd'],
+        plainText: 'jsjfosdf'
       })
       .expect(201);
     expect(result.status).to.equal(201);
     expect(result.body).to.be.an('object');
     expect(result.body).to.have.property('article');
     expect(result.body.article).to.have.property('slug');
-    expect(result.body.article).to.have.property('readtime');
     expect(result.body.article).to.have.property('title');
     expect(result.body.article).to.have.property('author');
     expect(result.body.article).to.have.property('description');
     expect(result.body.article).to.have.property('tagList');
+  });
+
+  it('SHOULD THROW AN ERROR IS REQUIRED REQUEST FIELD ARE NOT PROVIDED', async () => {
+    const result = await server
+      .post('/api/v1/articles')
+      .set('authorization', testToken)
+      .send({
+        tagList: ['thoisfd'],
+        plainText: 'jsjfosdf'
+      })
+      .expect(422);
+    expect(result.status).to.equal(422);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('error');
   });
 });

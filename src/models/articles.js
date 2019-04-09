@@ -17,21 +17,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.JSONB,
       allowNull: false
     },
-    author: {
+    plainText: {
       type: DataTypes.STRING,
-      allowNull: false
-    },
-    readtime: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true
     },
     tagList: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
+    },
+    isPremium: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     }
   }, {});
   articles.associate = (models) => {
-    articles.belongsTo(models.user, { foreignKey: 'author', as: 'userId' });
+    articles.belongsTo(models.user, { foreignKey: 'author' });
   };
   return articles;
 };
