@@ -35,13 +35,14 @@ app.use('/api/v1', router);
 
 app.use((req, res, next) => {
   const error = new Error('Resource Not Found');
+  error.customMessage = error.message;
   error.status = 404;
   next(error);
 });
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;
-  const errorMessage = err.message || 'Internal Server Error';
+  const errorMessage = err.customMessage || 'Internal Server Error';
   res.status(errorStatus)
     .json({
       status: errorStatus,

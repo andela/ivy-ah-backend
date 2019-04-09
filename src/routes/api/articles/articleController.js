@@ -48,4 +48,33 @@ export default class Article {
       });
     }
   }
+
+  /**
+ * @static
+ * @param {obj} request
+ * @param {ogj} response
+ *  @param {next} next
+ * @returns {void}
+ * @memberof Article class
+ */
+  static async getArticlesByPage(request, response, next) {
+    try {
+      const limit = request.query.limit ? request.query.limit : null;
+      const offset = request.query.page ? limit * (request.query.page - 1) : null;
+      const { count, rows } = await articles.findAndCountAll({
+        offset,
+        limit
+      });
+      const numberOfPages = limit ? (Math.ceil(count / limit)) : 1;
+      return response.status(200).json({
+        status: 200,
+        numberOfArticles: count,
+        numberOfPages,
+        currentPage: request.query.page,
+        articles: rows,
+      });
+    } catch (err) {
+      return next(err);
+    }
+  }
 }

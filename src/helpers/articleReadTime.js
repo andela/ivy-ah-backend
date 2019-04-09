@@ -10,7 +10,7 @@ const calculateReadTime = (article) => {
   const numberOfWords = article.match(/\b[-'?(\w+)]+/gi).length;
 
   const readtime = Math.round((numberOfWords / averageWordsPerMinute) * 60);
-  return readtime;
+  return `${readtime} secs`;
 };
 
 export default calculateReadTime;

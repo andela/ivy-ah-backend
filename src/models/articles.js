@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     readTime: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     isPremium: {
