@@ -11,6 +11,7 @@ const email = joi.string().email()
 const password = joi.string().trim().regex(/^[\w\W]{8,32}$/)
   .error(() => 'password must contain between 8 and 32 characters')
   .required();
+
 const resetToken = joi.string().trim().regex(/^[\w\W]+\.[\w\W]+\.[\w\W]+$/)
   .error(() => 'The password reset link has expired, kindly request for a new reset link')
   .required();
@@ -49,6 +50,12 @@ const updateSchema = joi.object().keys({
     .error(() => 'email must be in the format john@example.com')
 }).or('username', 'email', 'firstname', 'lastname');
 
+const reason = joi.string()
+  .error(() => 'reason must be a string').required();
+
+const article = joi.string()
+  .error(() => 'article must be a string');
+
 const schemas = {
   userLogin: joi.object().keys({ email, password }),
   userSignup: joi.object().keys({ username, email, password }),
@@ -61,7 +68,8 @@ const schemas = {
   articleRating: joi.object().keys({ articleId, rating }),
   getArticleRating: joi.object().keys({ articleId }),
   updateSchema,
-  validateArticleLikes: joi.object().keys({ articleId, option })
+  validateArticleLikes: joi.object().keys({ articleId, option }),
+  reportArticles: joi.object().keys({ reason, article }),
 };
 
 /**
