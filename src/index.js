@@ -40,10 +40,12 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(err.status || 500)
+  const errorStatus = err.status || 500;
+  const errorMessage = err.message || 'Internal Server Error';
+  res.status(errorStatus)
     .json({
-      status: err.status,
-      error: err.message
+      status: errorStatus,
+      error: errorMessage
     });
 });
 
