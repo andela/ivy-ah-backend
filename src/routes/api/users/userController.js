@@ -13,7 +13,7 @@ class Users {
    */
   static async getAllUsers(req, res, next) {
     try {
-      const users = await db.user
+      const users = await db.users
         .findAll({
           attributes: { exclude: ['password'] }
         });

@@ -8,7 +8,7 @@ import PasswordHasher from '../../../helpers/PasswordHasher';
  * contains static methods for creating a user
  * @class User
  */
-class Auth {
+class User {
   /**
    * method for handling user signup
    * @param {Request} request object
@@ -28,7 +28,7 @@ class Auth {
         password
       } = request.body;
       const hashedPassword = await PasswordHasher.hashPassword(password);
-      const result = await db.user
+      const user = await db.users
         .create({
           username,
           firstname,
@@ -39,7 +39,7 @@ class Auth {
           password: hashedPassword,
         });
       const token = await authenticator.generateToken({
-        email: result.email
+        email: user.email, userid: user.userid, role: user.userid
       });
       return response.status(201).json({
         status: 201,
@@ -74,33 +74,35 @@ class Auth {
       password
     } = req.body;
     try {
-      const result = await db.user
+      const user = await db.users
         .findOne({
           attributes: ['password', 'email', 'username', 'bio', 'image'],
           where: { email },
         });
-      if (!result) {
+      if (!user) {
         return res.status(400).json({
           status: 400,
           error: 'email or password incorrect'
         });
       }
-      if (!PasswordHasher.comparePassword(password, result.password)) {
+      if (!PasswordHasher.comparePassword(password, user.password)) {
         return res.status(400).json({
           status: 400,
           error: 'email or password incorrect'
         });
       }
 
-      const token = await authenticator.generateToken({ email: result.email });
+      const token = await authenticator.generateToken({
+        email: user.email, userid: user.userid, role: user.userid
+      });
       return res.status(200).json({
         status: 200,
         user: {
           email,
           token,
-          username: result.username,
-          bio: result.bio,
-          image: result.image
+          username: user.username,
+          bio: user.bio,
+          image: user.image
         },
       });
     } catch (err) {
@@ -115,11 +117,11 @@ class Auth {
  * method for checking if user is already registered
  * @param {String} email user email
  * @param {String} username user email
- * @returns {Boolean} query result
+ * @returns {Boolean} query user
  * @memberof User
  */
   static async socialAuth(email, username) {
-    const [result] = await db.user
+    const [result] = await db.users
       .findAll({
         where: {
           email
@@ -138,15 +140,17 @@ class Auth {
     }
     const password = Math.random().toString();
     const hashedPassword = await PasswordHasher.hashPassword(password);
-    await db.user
+    const userDetails = await db.users
       .create({
         username,
         email,
         password: hashedPassword,
       });
-    const token = await authenticator.generateToken({ email });
+    const token = await authenticator.generateToken({
+      email: userDetails.email, userid: userDetails.userid, role: userDetails.role
+    });
     return { username, email, token };
   }
 }
 
-export const { userSignup, userLogin, socialAuth } = Auth;
+export const { userSignup, userLogin, socialAuth } = User;

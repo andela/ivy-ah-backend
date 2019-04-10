@@ -7,7 +7,7 @@ import Templates from '../../../helpers/Templates';
 
 const getPayload = async (email) => {
   try {
-    const row = await db.user.findOne({
+    const row = await db.users.findOne({
       where: { email },
       attributes: ['updatedAt', 'firstname'],
       raw: true,
@@ -81,10 +81,8 @@ class PasswordReset {
       const isVerified = await authenticator.verifyToken(resetToken, secret);
       if (isVerified) {
         const hashedPassword = await PasswordHasher.hashPassword(password);
-        const row = await db.user.update(
-          { password: hashedPassword },
-          { where: { email } }
-        );
+        const row = await db.users.update({ password: hashedPassword },
+          { where: { email } });
         if (row[0] === 1) {
           emailSender(email, 'Notification for a Successful Password Reset', Templates.resetPassword(url, firstname));
           return res.status(200).json({

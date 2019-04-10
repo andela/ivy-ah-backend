@@ -1,14 +1,14 @@
 import generateSlug from '../../../helpers/slugGenerator';
 import models from '../../../models';
 
-const { articles } = models;
+const { articles, users } = models;
 /**
  *
  *
  * @export
  * @class Articles
  */
-class Article {
+export default class Article {
 /**
  *
  *
@@ -31,7 +31,9 @@ class Article {
         description,
         tagList,
         plainText,
-        author: request.user.email
+        author: request.user.userid
+      }, {
+        include: [users]
       });
       if (result) {
         const { dataValues } = result;
@@ -48,5 +50,3 @@ class Article {
     }
   }
 }
-
-export default Article;

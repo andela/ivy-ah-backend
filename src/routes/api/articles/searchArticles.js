@@ -1,6 +1,6 @@
 import db from '../../../models/index';
 
-const { user, articles, Sequelize } = db;
+const { users, articles, Sequelize } = db;
 const { Op } = Sequelize;
 /**
  * converts a string into an array of words
@@ -35,7 +35,7 @@ const searchArticles = async ({ body }, res) => {
 
     const author = body.author ? {
       include: {
-        model: user,
+        model: users,
         as: 'userId',
         attributes,
         where: {
@@ -60,7 +60,7 @@ const searchArticles = async ({ body }, res) => {
     } : {};
 
     const searchResults = await articles.findAll({
-      include: { attributes, model: user },
+      include: { attributes, model: users },
       ...author,
       where: {
         ...tags,
