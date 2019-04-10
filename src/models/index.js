@@ -6,7 +6,12 @@ import User from './user';
 
 const basename = _basename(__filename);
 const db = {};
-const sequelize = new Sequelize({ config: process.env.DATABASE_URL, dialect: 'postgres' });
+let sequelize;
+if (process.env.NODE_ENV === 'test') {
+  sequelize = new Sequelize({ config: process.env.TEST_DATABASE_URL, dialect: 'postgres' });
+} else {
+  sequelize = new Sequelize({ config: process.env.DATABASE_URL, dialect: 'postgres' });
+}
 
 readdirSync(__dirname)
   .filter((file) => {

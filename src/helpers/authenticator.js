@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
  * Handles jwt signing and verification
  * @class authenticator
  */
-class Authenticator {
+class authenticator {
   /**
    * signs and generates a jwt token from a payload using either the
    * provided key or JWT_SECRET
@@ -13,7 +13,7 @@ class Authenticator {
    * @returns {String} jwt token
    * @memberof authenticator
    */
-  static generateToken(payload, key = process.env.JWT_SECRET, options = { expiresIn: '3h' }) {
+  static generateToken(payload, key = process.env.JWT_SECRET, options = { expiresIn: '24h' }) {
     return jwt.sign(payload, key, options);
   }
 
@@ -35,4 +35,4 @@ class Authenticator {
   }
 }
 
-export default Authenticator;
+export default authenticator;

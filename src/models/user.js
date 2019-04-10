@@ -1,16 +1,34 @@
-const user = (sequelize, DataTypes) => {
-  const users = sequelize.define('user', {
+import shortid from 'shortid';
+
+module.exports = (sequelize, DataTypes) => {
+  const users = sequelize.define('users', {
+    userid: {
+      type: DataTypes.TEXT,
+      unique: true,
+      primaryKey: true,
+      defaultValue: shortid.generate(),
+      allowNull: false
+    },
     username: {
       type: DataTypes.STRING(50),
-      unique: {
-        args: true,
-        msg: 'username already in use!'
-      },
       field: 'user_name',
     },
     firstname: {
       type: DataTypes.STRING(255),
       field: 'first_name',
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    isSubscribed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    role: {
+      type: DataTypes.ENUM,
+      values: ['admin', 'user', 'guest'],
+      defaultValue: 'user',
     },
     lastname: {
       type: DataTypes.STRING(255),
@@ -19,7 +37,6 @@ const user = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      primaryKey: true,
       validate: {
         isEmail: true
       },
@@ -29,7 +46,8 @@ const user = (sequelize, DataTypes) => {
       }
     },
     password: {
-      type: DataTypes.TEXT
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
     bio: {
       type: DataTypes.TEXT,
@@ -41,10 +59,8 @@ const user = (sequelize, DataTypes) => {
       allowNull: true
     },
   }, {});
-  users.associate = (models) => {
-    users.hasMany(models.articles);
-  };
+  // users.associate = (models) => {
+  //   users.hasMany(models.articles);
+  // };
   return users;
 };
-
-export default user;

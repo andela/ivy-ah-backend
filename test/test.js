@@ -260,6 +260,9 @@ describe('Test for user Login', () => {
 });
 
 describe('Test for user social auth', () => {
+  before(async () => {
+    await models.sequelize.sync({ force: true });
+  });
   it('Users.socialAuth should return valid objects', async () => {
     const userObject = await socialAuth('john@gmail.com', 'john');
     expect(userObject).to.be.an('object');
