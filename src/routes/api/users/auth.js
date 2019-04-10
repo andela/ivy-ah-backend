@@ -138,13 +138,15 @@ class Auth {
     }
     const password = Math.random().toString();
     const hashedPassword = await PasswordHasher.hashPassword(password);
-    await db.user
+    const userObj = await db.users
       .create({
         username,
         email,
         password: hashedPassword,
       });
-    const token = await authenticator.generateToken({ email });
+    const token = await authenticator.generateToken({
+      email: userObj.email, userid: userObj.userid, role: userObj.userid
+    });
     return { username, email, token };
   }
 }
