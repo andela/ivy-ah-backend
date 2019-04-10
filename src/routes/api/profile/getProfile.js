@@ -12,10 +12,10 @@ class Profiles {
    */
   static async getAProfile(request, response) {
     try {
-      const { userid } = request.params;
+      const { id } = request.params;
       const profile = await db.users.findOne({
         attributes: { exclude: ['password'] },
-        where: { userid },
+        where: { id },
       });
       if (profile) {
         response.status(200).json({

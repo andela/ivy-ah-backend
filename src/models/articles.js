@@ -1,9 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
   const articles = sequelize.define('articles', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      unique: true,
+      allowNull: false,
+    },
     slug: {
       type: DataTypes.STRING,
-      primaryKey: true,
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     title: {
       type: DataTypes.JSONB,
@@ -18,11 +25,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     plainText: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true
     },
     tagList: {
       type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+    },
+    readTime: {
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     isPremium: {

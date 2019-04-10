@@ -79,7 +79,7 @@ describe('artilce search', () => {
         description: 'this is the new description',
         title: 'this is the true new title of the article',
         body: 'this is the new body of the body',
-        tagList: ['thoisfd'],
+        tagList: ['article', 'article', 'another tag'],
         plainText: 'jsjfosdf',
       })
       .expect(201);

@@ -3,6 +3,6 @@ import Profiles from './getProfile';
 
 const profilesRouter = express.Router();
 
-profilesRouter.get('/:userid', Profiles.getAProfile);
+profilesRouter.get('/:id', Profiles.getAProfile);
 
 module.exports = profilesRouter;
