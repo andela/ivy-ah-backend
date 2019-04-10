@@ -13,17 +13,17 @@ class Profiles {
   static async getAProfile(request, response) {
     try {
       const { userid } = request.params;
-      const user = await db.users.findOne({
+      const profile = await db.users.findOne({
         attributes: { exclude: ['password'] },
         where: { userid },
       });
-      if (user) {
+      if (profile) {
         response.status(200).json({
           status: 200,
-          profile: user,
+          profile,
         });
       }
-      if (!user) {
+      if (!profile) {
         response.status(404).json({
           status: 404,
           errors: 'Profile not found',
