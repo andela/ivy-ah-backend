@@ -6,7 +6,7 @@ import {
 } from './auth';
 import { sendPasswordResetToken, resetPassword, } from './passwordReset';
 import validate from '../../../middlewares/validator';
-import Users from './userController/userController';
+import Users from './UserController';
 import checkToken from '../../../middlewares/authorization';
 
 const usersRoute = express.Router();
