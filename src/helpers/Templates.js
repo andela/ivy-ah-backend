@@ -146,14 +146,14 @@ class Templates {
     
   <div class="email">
   <div class="brand-name">
-    <h1>Authors Haven</h1>
+    <h1>Authors' Haven</h1>
    </div>
   <div class="message">
     <div class="message-body">
       <p>Hello ${user},</p>
       <p>Your password reset was successful. Click this <a href=${link}>link</a> to login to your account.</p>
     
-    <p>Authors Haven Team.</p>
+    <p>Authors' Haven Team.</p>
       </div>
   </div>
   </div>
@@ -317,7 +317,108 @@ class Templates {
     <p>Authors' Haven Team.</p>
       </div>
   </div>
-  </div>
+  </div>`;
+  }
+
+  /**
+   * A method for creating a template for notifying users after resetting password
+   * @param { object } article - The article object to be sent
+   * @param { string } url - The url of the created article
+   * @param { string } authorName - The name of the author
+   * @returns { string } HTML template
+   * @memberof Templates
+   */
+  static articleNotify(article, url, authorName) {
+    const {
+      title, description, bannerImage
+    } = article;
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+      <style type="text/css">
+          .email {
+        background: #F2F2F2;
+        width: 100%;
+        font-family: 'Roboto', sans-serif;
+        color: #000000;
+        height: 100%;
+        border : solid
+        }
+      
+        .brand-name h1{
+          text-align: center;
+          margin: 0;
+          padding: 20px;
+        }
+      
+        .message {
+          background: white;
+          width: 50%;
+          margin: 0 auto;
+          padding: 50px;
+          border-top: 5px solid #0645F0;
+        }
+      
+        .message-title {
+          text-align: center;
+        }
+        
+        .message-body p{
+          font-size: 18px;
+        }
+        
+        .message-body a {
+          color: #89CFF0;
+        }
+        
+        .unsubscribe p{
+          font-size: 12px;
+        }
+        
+        .article-snippet {
+          margin-bottom: 10px;
+        }
+        
+        .article-title {
+          margin-bottom: 10px;
+          font-size: 18px;
+          font-weight: bold;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="email">
+    <div class="brand-name">
+      <h1>Authors' Haven</h1>
+     </div>
+    <div class="message">
+      <div class="message-title">
+        <h1>New Article Alert</h1>
+      </div>
+      <div class="message-body">
+        <p>Hello,</p>
+        <p>New Post! ${authorName === null ? 'One of your favorite authors' : authorName} has just published a new article.</p>
+        <div class="article">
+          <img height="200" width="200" src=${bannerImage} alt="article image"/>
+          <div class="article-title"><p>${title}</p></div>
+          <div class="article-snippet"><p>${description}</p></div>
+          <p>You can view the article by clicking <a href="${url}">${url}</a>.</p>
+          <div class="unsubscribe">
+            <p>If you are no longer interested in receiving notifications for new articles, kindly change the settings on your dashboard</p>
+          </div>
+        </div>
+      
+        </div>
+      <p>Authors' Haven Team</p>
+    </div>
+    </div>
+    </body>
+    </html>    
     `;
   }
 }

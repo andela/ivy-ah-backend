@@ -1,4 +1,5 @@
 import db from '../../../models/index';
+import { sendFollowingNotification } from '../../../socket/sendNotification';
 
 /**
  * Following Controller
@@ -29,7 +30,7 @@ class Following {
       });
       const [, isCreated] = newFollowing;
       if (isCreated) {
-        return res.status(201).json({
+        res.status(201).json({
           status: 201,
           message: 'You have successfully followed the author',
           data: [{
@@ -37,14 +38,15 @@ class Following {
             followerId
           }]
         });
+        sendFollowingNotification({ authorId, followerId }, 'follow');
+        return;
       }
       res.status(409).json({
         status: 409,
         error: 'You are already following the author'
       });
     } catch (error) {
-      const { detail } = error.parent;
-      if (detail.includes('authorId')) {
+      if (error.name === 'SequelizeForeignKeyConstraintError') {
         return res.status(404).json({
           status: 404,
           error: 'The Author does not exist',
@@ -71,7 +73,7 @@ class Following {
         where: { authorId, followerId }
       });
       if (removeFollowing) {
-        return res.status(200).json({
+        res.status(200).json({
           status: 200,
           message: 'You have successfully unfollowed the author',
           data: [{
@@ -79,6 +81,8 @@ class Following {
             followerId
           }]
         });
+        sendFollowingNotification({ authorId, followerId }, 'unfollow');
+        return;
       }
       return res.status(404).json({
         status: 404,

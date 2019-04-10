@@ -4,6 +4,7 @@ import calculateReadTime from '../../../helpers/articleReadTime';
 import removeDuplicate from '../../../helpers/arrayDuplicateRemover';
 import authenticator from '../../../helpers/authenticator';
 import addToReadArticles from '../../../helpers/readingStats';
+import articleNotifications from '../../../helpers/articleNotification';
 
 const {
   articles, likes, users, ratings, comment, commentlikes, sequelize
@@ -20,19 +21,21 @@ export default class Article {
  * @static
  * @param {Request} request this is the request object
  * @param {Response} response this is the response object
+ * @param {function} next
  * @memberof Articles
  * @returns {void}
  */
-  static async createArticle(request, response) {
+  static async createArticle(request, response, next) {
     try {
       const {
-        title, body, description, tagList, plainText
+        title, body, description, tagList, plainText, bannerImage
       } = request.body;
       const result = await articles.create({
         title,
         body,
         description,
         plainText,
+        bannerImage,
         author: request.user.id,
         slug: generateSlug(title),
         tagList: removeDuplicate(tagList),
@@ -40,16 +43,16 @@ export default class Article {
       });
       if (result) {
         const { dataValues } = result;
-        return response.status(201).json({
+        delete dataValues.authorLastSeen;
+        response.status(201).json({
           status: 201,
           article: dataValues,
         });
+        await articleNotifications(dataValues, dataValues.author);
+        return;
       }
     } catch (err) {
-      return response.status(500).json({
-        status: 500,
-        error: 'Something went wrong. Please try again later'
-      });
+      return next(err);
     }
   }
 

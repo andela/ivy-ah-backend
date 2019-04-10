@@ -1,4 +1,5 @@
 import models from '../../../models';
+import { sendLikeNotification } from '../../../socket/sendNotification';
 
 /**
  * handles functionality for toggling like and
@@ -17,9 +18,10 @@ export default async (request, response, next) => {
       type: models.sequelize.QueryTypes.SELECT
     });
     response.status(200).send({ status: 200, data: likeResult });
+    sendLikeNotification(likeResult);
   } catch (err) {
-    if (err.parent.code === '23503') {
-      response.status(404).status({ status: 404, error: 'article does not exist' });
+    if (err.name === 'SequelizeForeignKeyConstraintError') {
+      return response.status(404).status({ status: 404, error: 'article does not exist' });
     }
     err.message = null;
     return next(err);

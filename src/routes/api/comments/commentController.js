@@ -1,5 +1,6 @@
 import uuid from 'uuid/v4';
 import models from '../../../models';
+import { sendCommentNotification } from '../../../socket/sendNotification';
 
 const { users, comment } = models;
 
@@ -22,12 +23,15 @@ class Comment {
  */
   static async postComment(req, res, next) {
     const { body } = req.body;
-    let articleId, parentTracker;
-    if (!req.params.articlesId) {
-      parentTracker = req.params.parentCommentsId;
-    } else {
-      articleId = req.params.articlesId;
+
+    const parentTracker = req.params.parentCommentsId;
+    let articleId = req.params.articlesId;
+
+    if (!articleId) {
+      const article = await comment.findByPk(parentTracker);
+      articleId = article ? article.articleId : null;
     }
+
     try {
       const newComment = await comment.create({
         articleId,
@@ -35,15 +39,20 @@ class Comment {
         body,
         author: req.user.id
       });
-      if (newComment) {
-        return res.status(201).json({
-          comment: {
-            id: newComment.id,
-            body: newComment.body
-          },
+
+      res.status(201).json({
+        comment: newComment,
+      });
+
+      sendCommentNotification(newComment);
+      return;
+    } catch (err) {
+      if (err.name === 'SequelizeForeignKeyConstraintError') {
+        return res.status(404).send({
+          status: 404,
+          error: 'article does not exist'
         });
       }
-    } catch (err) {
       return next(err);
     }
   }
@@ -106,12 +115,6 @@ class Comment {
         })),
         repliesCount: oneComment.childComment.length
       }));
-      if (allComments.length === 0) {
-        return res.status(404).json({
-          status: 404,
-          error: 'there are no comments for the resource requested'
-        });
-      }
       return res.status(200).json({
         comments: allComments,
         commentsCount: allComments.length

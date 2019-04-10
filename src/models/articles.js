@@ -1,3 +1,5 @@
+import Sequelize from 'sequelize';
+
 module.exports = (sequelize, DataTypes) => {
   const articles = sequelize.define('articles', {
     id: {
@@ -6,6 +8,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       unique: true,
       allowNull: false,
+    },
+    bannerImage: {
+      type: DataTypes.TEXT,
+      defaultValue: 'https://res.cloudinary.com/ivy-league/image/upload/v1556012036/quill-teal.jpg',
+      allowNull: false
     },
     slug: {
       type: DataTypes.STRING,
@@ -40,6 +47,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false
+    },
+    authorLastSeen: {
+      type: DataTypes.DATE,
+      defaultValue: Sequelize.fn('NOW'),
+      allowNull: false,
     }
   }, {});
   articles.associate = (models) => {
