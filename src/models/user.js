@@ -1,12 +1,10 @@
-import shortid from 'shortid';
-
 module.exports = (sequelize, DataTypes) => {
   const users = sequelize.define('users', {
-    userid: {
-      type: DataTypes.TEXT,
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       unique: true,
       primaryKey: true,
-      defaultValue: shortid.generate(),
       allowNull: false
     },
     username: {

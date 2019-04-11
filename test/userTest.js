@@ -68,7 +68,7 @@ describe('Test for user Login', () => {
     const result = await supertest(app)
       .get('/api/v1/users')
       .set('Authorization', currentToken);
-    Userid = result.body.users[0].userid;
+    Userid = result.body.users[0].id;
     expect(result.body).to.be.an('object');
     expect(result).to.have.property('status')
       .to.be.equals(200);
@@ -92,7 +92,7 @@ describe('Test for user Login', () => {
   });
   it('should return an error for profile not found ', async () => {
     const result = await supertest(app)
-      .get('/api/v1/profiles/nouser');
+      .get('/api/v1/profiles/95a98249-6e45-49ef-a9a9-848505bdfe0e');
     expect(result.body).to.be.an('object');
     expect(result).to.have.property('status')
       .to.be.equals(404);

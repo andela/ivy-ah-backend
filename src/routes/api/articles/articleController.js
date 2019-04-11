@@ -1,7 +1,9 @@
 import generateSlug from '../../../helpers/slugGenerator';
 import models from '../../../models';
+import calculateReadTime from '../../../helpers/articleReadTime';
+import removeDuplicate from '../../../helpers/arrayDuplicateRemover';
 
-const { articles, users } = models;
+const { articles } = models;
 /**
  *
  *
@@ -10,11 +12,10 @@ const { articles, users } = models;
  */
 export default class Article {
 /**
- *
- *
+ * this function handles the creation of an article
  * @static
- * @param {*} request
- * @param {*} response
+ * @param {Request} request this is the request object
+ * @param {Response} response this is the response object
  * @memberof Articles
  * @returns {void}
  */
@@ -23,17 +24,15 @@ export default class Article {
       const {
         title, body, description, tagList, plainText
       } = request.body;
-      const slug = generateSlug(title);
       const result = await articles.create({
-        slug,
         title,
         body,
         description,
-        tagList,
         plainText,
-        author: request.user.userid
-      }, {
-        include: [users]
+        author: request.user.id,
+        slug: generateSlug(title),
+        tagList: removeDuplicate(tagList),
+        readTime: calculateReadTime(plainText)
       });
       if (result) {
         const { dataValues } = result;

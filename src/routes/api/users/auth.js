@@ -39,7 +39,7 @@ class User {
           password: hashedPassword,
         });
       const token = await authenticator.generateToken({
-        email: user.email, userid: user.userid, role: user.userid
+        email: user.email, id: user.id, role: user.role
       });
       return response.status(201).json({
         status: 201,
