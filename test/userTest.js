@@ -6,6 +6,7 @@ import models from '../src/models';
 
 dotenv.config();
 let currentToken = 'notoken';
+let Userid;
 
 describe('Test for user Login', () => {
   before(async () => {
@@ -67,6 +68,7 @@ describe('Test for user Login', () => {
     const result = await supertest(app)
       .get('/api/v1/users')
       .set('Authorization', currentToken);
+    Userid = result.body.users[0].userid;
     expect(result.body).to.be.an('object');
     expect(result).to.have.property('status')
       .to.be.equals(200);
@@ -78,5 +80,22 @@ describe('Test for user Login', () => {
     expect(result.body.users[0]).to.have.property('image');
     expect(result.body.users[0]).to.have.property('username')
       .to.be.equals('kisses');
+  });
+  it('should return an object profile in the users table', async () => {
+    const result = await supertest(app)
+      .get(`/api/v1/profiles/${Userid}`);
+    expect(result.body).to.be.an('object');
+    expect(result).to.have.property('status')
+      .to.be.equals(200);
+    expect(result.body).to.have.property('profile')
+      .to.be.an('object');
+  });
+  it('should return an error for profile not found ', async () => {
+    const result = await supertest(app)
+      .get('/api/v1/profiles/nouser');
+    expect(result.body).to.be.an('object');
+    expect(result).to.have.property('status')
+      .to.be.equals(404);
+    expect(result.body).to.have.property('errors');
   });
 });
