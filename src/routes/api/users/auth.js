@@ -44,6 +44,7 @@ class User {
       return response.status(201).json({
         status: 201,
         user: {
+          userid: user.id,
           email,
           token,
           username,
