@@ -100,4 +100,21 @@ describe('artilce search', () => {
     expect(result.status).to.equal(422);
     expect(result.body.error.keyword).to.deep.equal('keyword must be a string');
   });
+  it('should return paginated list of all articles', async () => {
+    const articles = await server.get('/api/v1/articles/?page=1&limit=4');
+    expect(articles.status).to.equal(200);
+    expect(articles.body).to.be.an('object');
+    expect(articles.body).to.have.property('status');
+    expect(articles.body).to.have.property('numberOfArticles');
+    expect(articles.body).to.have.property('numberOfPages');
+    expect(articles.body).to.have.property('articles');
+  });
+  it('should return all articles', async () => {
+    const articles = await server.get('/api/v1/articles/');
+    expect(articles.status).to.equal(200);
+    expect(articles.body).to.be.an('object');
+    expect(articles.body).to.have.property('status');
+    expect(articles.body).to.have.property('articles');
+    expect(articles.body).to.have.property('numberOfArticles');
+  });
 });
