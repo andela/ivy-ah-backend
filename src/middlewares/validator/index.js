@@ -109,6 +109,38 @@ class Validate {
         status: 422, error,
       }));
   }
+
+  /**
+  *  middleware for handling validation on article rating
+  * @static
+  * @param {Request} req request object
+  * @param {Response} res response object
+  * @param {Next} next called on validation success
+  * @return {void} void
+  * @memberof validate
+  */
+  static validateArticleRating(req, res, next) {
+    validator(req.body, 'articleRating').then(() => next())
+      .catch(error => res.status(422).json({
+        status: 422, error,
+      }));
+  }
+
+  /**
+  *  middleware for handling validation on getting article rating
+  * @static
+  * @param {Request} req request object
+  * @param {Response} res response object
+  * @param {Next} next called on validation success
+  * @return {void} void
+  * @memberof validate
+  */
+  static validateGetArticleRating(req, res, next) {
+    validator(req.params, 'getArticleRating').then(() => next())
+      .catch(error => res.status(422).json({
+        status: 422, error,
+      }));
+  }
 }
 
 export default Validate;

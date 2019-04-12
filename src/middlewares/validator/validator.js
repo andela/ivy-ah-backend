@@ -19,8 +19,13 @@ const resetToken = joi.string().trim().regex(/^[\w\W]+\.[\w\W]+\.[\w\W]+$/)
 const title = joi.string().required().error(() => 'Title is required');
 const description = joi.string().required().error(() => 'description is required');
 const body = joi.string().required().error(() => 'Body is required');
-const tagList = joi.array().optional().error(() => 'tagList must be an array ');
-const plainText = joi.string().optional().error(() => 'Plain text should be a string');
+const tagList = joi.array().required().error(() => 'tagList must be an array ');
+const plainText = joi.string().required().error(() => 'Plain text is required');
+
+const articleId = joi.string().guid().required().error(() => 'We do not know the article you are trying to rate. Please provide an article id');
+const rating = joi.number().integer().min(1).max(5)
+  .required()
+  .error(() => 'we know you really want to rate this article, but rating can only be number 1, 2, 3, 4, or 5');
 
 const keyword = joi.string()
   .error(() => 'keyword must be a string');
@@ -39,7 +44,9 @@ const schemas = {
   }),
   forgotPassword: joi.object().keys({ email }),
   resetPassword: joi.object().keys({ password, resetToken }),
-  articleSearch: joi.object().keys({ keyword, tags, author }).or(['keyword', 'tags', 'author']).error(() => 'a valid search parameter must be provided')
+  articleSearch: joi.object().keys({ keyword, tags, author }).or(['keyword', 'tags', 'author']).error(() => 'a valid search parameter must be provided'),
+  articleRating: joi.object().keys({ articleId, rating }),
+  getArticleRating: joi.object().keys({ articleId }),
 };
 
 /**

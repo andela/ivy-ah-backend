@@ -12,6 +12,7 @@ const user = {
 };
 
 let testToken;
+let testArticle;
 before(async () => {
   await models.sequelize.sync({ force: true });
   const result = await server
@@ -41,6 +42,7 @@ describe('Article', () => {
     expect(result.body.article).to.have.property('author');
     expect(result.body.article).to.have.property('description');
     expect(result.body.article).to.have.property('tagList');
+    testArticle = result.body.article.id;
   });
 
   it('should throw an error is required request field are not provided', async () => {
@@ -116,5 +118,80 @@ describe('artilce search', () => {
     expect(articles.body).to.have.property('status');
     expect(articles.body).to.have.property('articles');
     expect(articles.body).to.have.property('numberOfArticles');
+  });
+});
+
+describe('Article rating', () => {
+  it('should rate an article', async () => {
+    const result = await server
+      .post('/api/v1/articles/rating')
+      .set('authorization', testToken)
+      .send({
+        articleId: `${testArticle}`,
+        rating: 4
+      })
+      .expect(201);
+    expect(result.status).to.equal(201);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('data');
+    expect(result.body.data).to.have.property('rating');
+    expect(result.body.data).to.have.property('articleId');
+    expect(result.body.data).to.have.property('id');
+  });
+
+  it('should return the same rating of an article', async () => {
+    const result = await server
+      .post('/api/v1/articles/rating')
+      .set('authorization', testToken)
+      .send({
+        articleId: `${testArticle}`,
+        rating: 4
+      })
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('data');
+    expect(result.body.data).to.have.property('rating');
+    expect(result.body.data).to.have.property('articleId');
+  });
+
+  it('should update the rating of an article', async () => {
+    const result = await server
+      .post('/api/v1/articles/rating')
+      .set('authorization', testToken)
+      .send({
+        articleId: `${testArticle}`,
+        rating: 3
+      });
+    expect(result.status).to.equal(200);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('data');
+    expect(result.body.data).to.have.property('rating');
+    expect(result.body.data).to.have.property('articleId');
+    expect(result.body.data).to.have.property('id');
+  });
+
+  it('should update the rating of an article', async () => {
+    const result = await server
+      .post('/api/v1/articles/rating')
+      .set('authorization', testToken)
+      .send({
+        articleId: 'd14077b9-1432-49c8-9f73-699d2c9796c3',
+        rating: 3
+      });
+    expect(result.status).to.equal(404);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('error');
+  });
+
+  it('should get the total rating of an article', async () => {
+    const result = await server
+      .get(`/api/v1/articles/rating/${testArticle}`)
+      .set('authorization', testToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body.data).to.be.an('object');
+    expect(result.body.data).to.have.property('totalRating');
+    expect(result.body.data).to.have.property('articleId');
   });
 });
