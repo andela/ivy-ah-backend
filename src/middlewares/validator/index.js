@@ -199,6 +199,22 @@ class Validate {
         error,
       }));
   }
+
+  /**  middleware for handling validation on comment creation
+ * @static
+ * @param {Request} req
+ * @param {Response} res
+ * @param {function} next
+ * @return { void }
+ * @memberof validate
+ */
+  static comment(req, res, next) {
+    validator(req.body, 'comment').then(() => next())
+      .catch(error => res.status(422).json({
+        status: 422,
+        error,
+      }));
+  }
 }
 
 export default Validate;

@@ -6,6 +6,7 @@ import searchArticles from './searchArticles';
 import rating from './rateArticleController';
 import likeController from './likeController';
 import reportArticles from './reportArticles';
+import { postComment, getComment } from './commentController';
 
 const { createArticle, getArticlesByPage } = articleController;
 const {
@@ -19,6 +20,10 @@ const articleRoute = Router();
 articleRoute.post('/', authenticator, validateArticle, createArticle);
 articleRoute.get('/search', validateArticleSearch, searchArticles);
 articleRoute.put('/likes/:articleId/:option', authenticator, validateArticleLikes, likeController);
+articleRoute.post('/:articlesId/comments', authenticator, validate.comment, postComment);
+articleRoute.get('/:articlesId/comments', getComment);
+articleRoute.post('/:parentCommentsId/comments/reply', authenticator, validate.comment, postComment);
+articleRoute.get('/:parentCommentsId/comments/reply', getComment);
 
 articleRoute.get('/', getArticlesByPage);
 

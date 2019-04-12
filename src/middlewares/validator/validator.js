@@ -70,6 +70,7 @@ const schemas = {
   updateSchema,
   validateArticleLikes: joi.object().keys({ articleId, option }),
   reportArticles: joi.object().keys({ reason, article }),
+  comment: joi.object().keys({ body })
 };
 
 /**
