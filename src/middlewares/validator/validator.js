@@ -36,6 +36,17 @@ const tags = joi.array()
 const author = joi.string()
   .error(() => 'author must be a string');
 
+const updateSchema = joi.object().keys({
+  username: joi.string().alphanum().min(3).max(10)
+    .error(() => 'username must contain between 3 and 10 alphanumeric characters'),
+  firstname: joi.string().alphanum().min(3).max(225)
+    .error(() => 'firstname must contain between 3 and 225 alphanumeric characters'),
+  lastname: joi.string().alphanum().min(3).max(225)
+    .error(() => 'lastname must contain between 3 and 225 alphanumeric characters'),
+  email: joi.string().email()
+    .error(() => 'email must be in the format john@example.com')
+}).or('username', 'email', 'firstname', 'lastname');
+
 const schemas = {
   userLogin: joi.object().keys({ email, password }),
   userSignup: joi.object().keys({ username, email, password }),
@@ -47,6 +58,7 @@ const schemas = {
   articleSearch: joi.object().keys({ keyword, tags, author }).or(['keyword', 'tags', 'author']).error(() => 'a valid search parameter must be provided'),
   articleRating: joi.object().keys({ articleId, rating }),
   getArticleRating: joi.object().keys({ articleId }),
+  updateSchema,
 };
 
 /**

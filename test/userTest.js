@@ -99,3 +99,46 @@ describe('Test for user Login', () => {
     expect(result.body).to.have.property('errors');
   });
 });
+
+describe('Test for update details', () => {
+  before(async () => {
+    await models.sequelize.sync({ force: true });
+  });
+  it('should create a new user', async () => {
+    const result = await supertest(app)
+      .post('/api/v1/users/signup')
+      .send({
+        username: 'kissess',
+        email: 'cosssys@coos.com',
+        password: 'aapppplee',
+      });
+    currentToken = result.body.user.token;
+    expect(result.status).to.be.equal(201);
+  });
+  it('should update user details', async () => {
+    const result = await supertest(app)
+      .patch('/api/v1/users')
+      .set('Authorization', currentToken)
+      .send({
+        username: 'mycheck',
+        email: 'cosssy@coos.com',
+      });
+    expect(result.body).to.be.an('object');
+    expect(result).to.have.property('status')
+      .to.be.equals(200);
+    expect(result.body).to.have.property('user');
+    expect(result.body.user).to.have.property('username')
+      .to.be.equals('mycheck');
+  });
+  it('should return error for empty request body', async () => {
+    const result = await supertest(app)
+      .patch('/api/v1/users')
+      .set('Authorization', currentToken)
+      .send({});
+    expect(result.body).to.be.an('object');
+    expect(result).to.have.property('status')
+      .to.be.equals(422);
+    expect(result.body).to.have.property('error')
+      .to.be.equals('"value" must contain at least one of [username, email, firstname, lastname]');
+  });
+});

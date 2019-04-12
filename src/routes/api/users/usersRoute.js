@@ -16,6 +16,7 @@ usersRoute.post('/login', validate.userLogin, userLogin);
 usersRoute.post('/forgotpassword', validate.forgotPassword, sendPasswordResetToken);
 usersRoute.patch('/resetpassword', validate.resetPassword, resetPassword);
 usersRoute.get('/', checkToken, Users.getAllUsers);
+usersRoute.patch('/', validate.validateUpdateUser, checkToken, Users.updateUser);
 usersRoute.get('/home', (req, res) => {
   res.send('every damn thing is working fine');
 });
