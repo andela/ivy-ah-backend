@@ -4,6 +4,7 @@ import swaggerDocument from '../../../documentation.json';
 import usersRoute from './users/usersRoute';
 import profilesRouter from './profile/profilesRoutes';
 import articleRoute from './articles/articleRoutes';
+import bookmarkRoute from './bookmarks/bookmarkRoute';
 
 const router = express.Router();
 
@@ -12,4 +13,5 @@ router.use('/users', usersRoute);
 router.use('/profiles', profilesRouter);
 router.use('/articles', articleRoute);
 
+router.use('/bookmarks', bookmarkRoute);
 module.exports = router;
