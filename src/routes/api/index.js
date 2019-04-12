@@ -5,6 +5,7 @@ import usersRoute from './users/usersRoute';
 import profilesRouter from './profile/profilesRoutes';
 import articleRoute from './articles/articleRoutes';
 import bookmarkRoute from './bookmarks/bookmarkRoute';
+import adminRoute from './admin/adminRoute';
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 router.use('/users', usersRoute);
 router.use('/profiles', profilesRouter);
 router.use('/articles', articleRoute);
+router.use('/admin', adminRoute);
 
 router.use('/bookmarks', bookmarkRoute);
 module.exports = router;

@@ -195,8 +195,32 @@ class Validate {
   static validateReportArticles(req, res, next) {
     validator(req.body, 'reportArticles').then(() => next())
       .catch(error => res.status(422).json({
+      status: 422, error,
+    }));
+  }
+   
+  /**
+   *
+   *
+   * @static
+   * @param {obj} request
+   * @param {obj} response
+   * @param {function} next
+   * @memberof Validate role update
+   */
+  static validateRoleUpdate(request, response, next) {
+    const { role } = request.body;
+    validator(request.body, 'userRole').then(() => {
+      if (role === 'user' || role === 'moderator' || role === 'admin') {
+        return next();
+      }
+      return response.status(422).json({
         status: 422,
-        error,
+        error: 'Role not available'
+      });
+    })
+      .catch(error => response.status(422).json({
+        status: 422, error,
       }));
   }
 
