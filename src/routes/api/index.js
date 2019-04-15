@@ -6,6 +6,7 @@ import profilesRouter from './profile/profilesRoutes';
 import articleRoute from './articles/articleRoutes';
 import bookmarkRoute from './bookmarks/bookmarkRoute';
 import adminRoute from './admin/adminRoute';
+import commentRoute from './comments/commentRoutes';
 
 const router = express.Router();
 
@@ -14,6 +15,7 @@ router.use('/users', usersRoute);
 router.use('/profiles', profilesRouter);
 router.use('/articles', articleRoute);
 router.use('/admin', adminRoute);
+router.use('/comments', commentRoute);
 
 router.use('/bookmarks', bookmarkRoute);
 module.exports = router;

@@ -95,4 +95,56 @@ describe('user is able to make comment', () => {
     expect(result.status).to.be.equal(404);
     expect(result.body.error).to.deep.equal('there are no comments for the resource requested');
   });
+
+  it('it should like a comment', async () => {
+    const result = await supertest(app)
+      .put(`/api/v1/comments/likes/${testCommentId}/like`)
+      .set('authorization', currentToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('data');
+    expect(result.body.data.option).to.equal(true);
+    expect(result.body.data.likes).to.equal(1);
+    expect(result.body.data.dislikes).to.equal(0);
+  });
+
+  it('it should remove a previous like an comment', async () => {
+    const result = await supertest(app)
+      .put(`/api/v1/comments/likes/${testCommentId}/like`)
+      .set('authorization', currentToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('data');
+    expect(result.body.data.option).to.equal(null);
+    expect(result.body.data.likes).to.equal(0);
+    expect(result.body.data.dislikes).to.equal(0);
+  });
+
+  it('it should dislike a comment', async () => {
+    const result = await supertest(app)
+      .put(`/api/v1/comments/likes/${testCommentId}/dislike`)
+      .set('authorization', currentToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('data');
+    expect(result.body.data.option).to.equal(false);
+    expect(result.body.data.likes).to.equal(0);
+    expect(result.body.data.dislikes).to.equal(1);
+  });
+
+  it('it should remove a previous dislike an comment', async () => {
+    const result = await supertest(app)
+      .put(`/api/v1/comments/likes/${testCommentId}/dislike`)
+      .set('authorization', currentToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('data');
+    expect(result.body.data.option).to.equal(null);
+    expect(result.body.data.likes).to.equal(0);
+    expect(result.body.data.dislikes).to.equal(0);
+  });
 });
