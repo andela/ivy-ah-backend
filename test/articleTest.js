@@ -250,3 +250,106 @@ describe('article like', () => {
     expect(result.body.data.dislikes).to.equal(null);
   });
 });
+describe('article reporting', () => {
+  let articleid;
+
+  it('report an article', async () => {
+    const article1 = await server
+      .post('/api/v1/articles')
+      .set('authorization', testToken)
+      .send({
+        description: 'this is the new description',
+        title: 'this is the true new title of the article',
+        body: 'this is the new body of the body',
+        tagList: ['thoisfd'],
+        plainText: 'jsjfosdf',
+      })
+      .expect(201);
+
+    await server
+      .post('/api/v1/articles')
+      .set('authorization', testToken)
+      .send({
+        description: 'this is the new description',
+        title: 'this is the true new title of the article',
+        body: 'this is the new body of the body',
+        tagList: ['thoisfd'],
+        plainText: 'jsjfosdf',
+      })
+      .expect(201);
+
+    articleid = article1.body.article.id;
+
+    const result = await server.post('/api/v1/articles/report')
+      .set('authorization', testToken).send({
+        article: articleid,
+        reason: 'it is not good'
+      }).expect(201);
+    expect(result.status).to.equal(201);
+    expect(result.body.message).to.deep.equal('article reported');
+  });
+
+  it('report an article', async () => {
+    const result = await server.post('/api/v1/articles/report')
+      .set('authorization', 'returnerrror').send({
+        article: articleid,
+        reason: 'it is not good'
+      }).expect(401);
+    expect(result.status).to.equal(401);
+  });
+
+  it('return an error on failed validation', async () => {
+    const result = await server.post('/api/v1/articles/report').set('authorization', testToken).send({
+      article: 15
+    }).expect(422);
+    expect(result.status).to.equal(422);
+    expect(result.body.error.article).to.deep.equal('article must be a string');
+  });
+
+  it('get all reported articles', async () => {
+    const result = await server.get('/api/v1/articles/report').set('authorization', testToken).expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body.data[0]).to.be.an('object');
+    expect(result.body.data[0].article.description).to.equal('this is the new description');
+    expect(result.body.data[0].reason).to.equal('it is not good');
+  });
+
+  it('remove an article from the reported table', async () => {
+    const result = await server.delete(`/api/v1/articles/report/${articleid}`).set('authorization', testToken).expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body.message).to.deep.equal('delete request successful');
+  });
+
+  it('remove an article that has not been reported', async () => {
+    const result = await server.delete(`/api/v1/articles/report/${articleid}`).set('authorization', testToken).expect(404);
+    expect(result.status).to.equal(404);
+    expect(result.body.message).to.deep.equal('article has not been reported');
+  });
+
+  it('report an article twice', async () => {
+    await server.post('/api/v1/articles/report')
+      .set('authorization', testToken).send({
+        article: articleid,
+        reason: 'it is not good again'
+      }).expect(201);
+
+    const result = await server.post('/api/v1/articles/report')
+      .set('authorization', testToken).send({
+        article: articleid,
+        reason: 'it is not good again'
+      }).expect(409);
+
+    expect(result.status).to.equal(409);
+    expect(result.body.error).to.deep.equal('article already reported by user');
+  });
+
+  it('report a non-existent article', async () => {
+    const result = await server.post('/api/v1/articles/report')
+      .set('authorization', testToken).send({
+        article: '1b9e5ac0-45e5-44b2-bbd1-c330f76f9998',
+        reason: 'it is not good again'
+      }).expect(404);
+    expect(result.status).to.equal(404);
+    expect(result.body.error).to.deep.equal('article does not exist');
+  });
+});

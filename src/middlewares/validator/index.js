@@ -184,6 +184,21 @@ class Validate {
         status: 422, error,
       }));
   }
+
+  /** middleware for article report data validation
+   * @param {Request} req request object
+   * @param {Response} res response object
+   * @param {function} next called on successful validation
+   * @memberof validate
+   * @returns {void} void
+   */
+  static validateReportArticles(req, res, next) {
+    validator(req.body, 'reportArticles').then(() => next())
+      .catch(error => res.status(422).json({
+        status: 422,
+        error,
+      }));
+  }
 }
 
 export default Validate;

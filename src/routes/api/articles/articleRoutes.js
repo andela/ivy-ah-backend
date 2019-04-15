@@ -5,11 +5,12 @@ import articleController from './articleController';
 import searchArticles from './searchArticles';
 import rating from './rateArticleController';
 import likeController from './likeController';
+import reportArticles from './reportArticles';
 
 const { createArticle, getArticlesByPage } = articleController;
 const {
   validateArticle, validateArticleSearch, validateArticleRating, validateGetArticleRating,
-  validateArticleLikes
+  validateArticleLikes, validateReportArticles
 } = validate;
 const { rateArticleHandler, getRatings } = rating;
 
@@ -23,5 +24,10 @@ articleRoute.get('/', getArticlesByPage);
 
 articleRoute.post('/rating', authenticator, validateArticleRating, rateArticleHandler);
 articleRoute.get('/rating/:articleId', authenticator, validateGetArticleRating, getRatings);
+articleRoute.post('/report', authenticator, validateReportArticles, reportArticles.report);
+
+articleRoute.get('/report', authenticator, reportArticles.getReported);
+
+articleRoute.delete('/report/:articleId', authenticator, reportArticles.clearReported);
 
 export default articleRoute;
