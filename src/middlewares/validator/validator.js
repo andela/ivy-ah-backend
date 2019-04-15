@@ -22,10 +22,12 @@ const body = joi.string().required().error(() => 'Body is required');
 const tagList = joi.array().required().error(() => 'tagList must be an array ');
 const plainText = joi.string().required().error(() => 'Plain text is required');
 
-const articleId = joi.string().guid().required().error(() => 'We do not know the article you are trying to rate. Please provide an article id');
+const articleId = joi.string().guid().required().error(() => 'We do not know the article you are trying to rate. Please provide a valid article id');
 const rating = joi.number().integer().min(1).max(5)
   .required()
   .error(() => 'we know you really want to rate this article, but rating can only be number 1, 2, 3, 4, or 5');
+
+const option = joi.string().required().regex(/^(like|dislike)$/).error(() => 'Options can only be like or dislike');
 
 const keyword = joi.string()
   .error(() => 'keyword must be a string');
@@ -59,6 +61,7 @@ const schemas = {
   articleRating: joi.object().keys({ articleId, rating }),
   getArticleRating: joi.object().keys({ articleId }),
   updateSchema,
+  validateArticleLikes: joi.object().keys({ articleId, option })
 };
 
 /**
