@@ -141,6 +141,22 @@ class Validate {
         status: 422, error,
       }));
   }
+
+  /**
+  *  middleware for handling validation on getting article rating
+  * @static
+  * @param {Request} req request object
+  * @param {Response} res response object
+  * @param {Next} next called on validation success
+  * @return {void} void
+  * @memberof validate
+  */
+  static validateUpdateUser(req, res, next) {
+    validator(req.body, 'updateSchema').then(() => next())
+      .catch(error => res.status(422).json({
+        status: 422, error,
+      }));
+  }
 }
 
 export default Validate;

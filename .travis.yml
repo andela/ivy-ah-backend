@@ -2,10 +2,10 @@ language: node_js
 node_js:
   - "stable"
 addons:
-  postgresql: "9.4"
+  postgresql: "9.6"
 services:
   - postgresql
 before_script:
-  - psql -c "create database authorsHaven_test;" -U postgres
+  - psql -c "create database travis_ci_test;" -U postgres
   - npm run migrate
 after_success: npm run coverage
