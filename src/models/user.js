@@ -57,5 +57,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
   }, {});
+
+  users.associate = (models) => {
+    users.hasMany(models.comment, { foreignKey: 'author' });
+    users.hasMany(models.archivedComments, { foreignKey: 'author' });
+    users.hasMany(models.reportedComments, { foreignKey: 'userid' });
+  };
   return users;
 };

@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: true
     },
-    parentCommentId: {
+    parentTracker: {
       type: DataTypes.UUID,
       allowNull: true,
     },
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
   comment.associate = (models) => {
     comment.belongsTo(models.users, { foreignKey: 'author' });
     comment.belongsTo(models.articles, { foreignKey: 'articleId' });
-    comment.hasMany(comment, { foreignKey: 'parentCommentId', as: 'childComment' });
+    comment.hasMany(comment, { foreignKey: 'parentTracker', as: 'childComment' });
     comment.hasMany(models.commentlikes, { foreignKey: 'commentId' });
   };
   return comment;

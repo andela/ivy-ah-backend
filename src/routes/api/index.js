@@ -6,7 +6,7 @@ import profilesRouter from './profile/profilesRoutes';
 import articleRoute from './articles/articleRoutes';
 import bookmarkRoute from './bookmarks/bookmarkRoute';
 import adminRoute from './admin/adminRoute';
-import commentRoute from './comments/commentRoutes';
+import commentRoute from './comments/commentRoute';
 
 const router = express.Router();
 
