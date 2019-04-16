@@ -250,6 +250,56 @@ describe('article like', () => {
     expect(result.body.data.dislikes).to.equal(null);
   });
 });
+
+
+describe('GET Article', () => {
+  it('should return a single article for a verified user', async () => {
+    const result = await server
+      .get(`/api/v1/articles/${articleId}`)
+      .set('authorization', testToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body.data).to.be.an('object');
+    expect(result.body.data).to.have.property('id');
+    expect(result.body.data).to.have.property('slug');
+    expect(result.body.data).to.have.property('comments');
+    expect(result.body.data).to.have.property('likes');
+    expect(result.body.data).to.have.property('ratings');
+  });
+
+  it('should return a single article for an unverified user', async () => {
+    const result = await server
+      .get(`/api/v1/articles/${articleId}`)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body.data).to.be.an('object');
+    expect(result.body.data).to.have.property('id');
+    expect(result.body.data).to.have.property('slug');
+    expect(result.body.data).to.have.property('comments');
+    expect(result.body.data).to.have.property('likes');
+    expect(result.body.data.likes).to.be.a('number');
+    expect(result.body.data).to.have.property('dislikes');
+    expect(result.body.data).to.have.property('ratings');
+  });
+
+  it('should return an error if the article does not exist', async () => {
+    const result = await server
+      .get('/api/v1/articles/73d5e6d2-c329-4771-b084-4ee4a20fab67')
+      .expect(404);
+    expect(result.status).to.equal(404);
+    expect(result.body).to.have.property('error');
+    expect(result.body.error).to.have.equal('Article not found');
+  });
+
+  it('should return an error if the article id is malformed', async () => {
+    const result = await server
+      .get('/api/v1/articles/73d5e6d2-c329-4771-b084')
+      .expect(422);
+    expect(result.status).to.equal(422);
+    expect(result.body).to.have.property('error');
+  });
+});
+
 describe('article reporting', () => {
   let articleid;
 

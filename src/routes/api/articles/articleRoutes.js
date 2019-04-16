@@ -8,7 +8,9 @@ import likeController from './likeController';
 import reportArticles from './reportArticles';
 import { postComment, getComment } from './commentController';
 
-const { createArticle, getArticlesByPage, deleteSpecificArticle } = articleController;
+const {
+  createArticle, getArticlesByPage, deleteSpecificArticle, getOneArticle
+} = articleController;
 const {
   validateArticle, validateArticleSearch, validateArticleRating, validateGetArticleRating,
   validateArticleLikes, validateReportArticles, validateDeleteArticles
@@ -33,7 +35,9 @@ articleRoute.get('/rating/:articleId', authenticator, validateGetArticleRating, 
 articleRoute.post('/report', authenticator, validateReportArticles, reportArticles.report);
 articleRoute.delete('/:articleId', authenticator, validateDeleteArticles, deleteSpecificArticle);
 articleRoute.get('/report', authenticator, reportArticles.getReported);
+articleRoute.get('/:articleId', validateGetArticleRating, getOneArticle);
 
 articleRoute.delete('/report/:articleId', authenticator, reportArticles.clearReported);
+
 
 export default articleRoute;
