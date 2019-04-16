@@ -16,7 +16,7 @@ const resetToken = joi.string().trim().regex(/^[\w\W]+\.[\w\W]+\.[\w\W]+$/)
   .error(() => 'The password reset link has expired, kindly request for a new reset link')
   .required();
 
-
+const role = joi.string().trim().required().error(() => 'Role is required');
 const title = joi.string().required().error(() => 'Title is required');
 const description = joi.string().required().error(() => 'description is required');
 const body = joi.string().required().error(() => 'Body is required');
@@ -70,7 +70,8 @@ const schemas = {
   updateSchema,
   validateArticleLikes: joi.object().keys({ articleId, option }),
   reportArticles: joi.object().keys({ reason, article }),
-  comment: joi.object().keys({ body })
+  comment: joi.object().keys({ body }),
+  userRole: joi.object().keys({ role })
 };
 
 /**

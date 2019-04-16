@@ -8,6 +8,7 @@
     "start": "npm run build && node dist/index.js",
     "build": "npm run clean && babel src -d dist",
     "migrate": "node_modules/.bin/sequelize db:migrate",
+    "seed": "node_modules/.bin/sequelize db:seed:all",
     "dev": "nodemon --exec babel-node src/index.js",
     "test": "nyc mocha test/*.js --require @babel/register --reporter spec -exit --no-timeouts",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
