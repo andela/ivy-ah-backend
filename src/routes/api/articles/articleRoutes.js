@@ -24,7 +24,6 @@ articleRoute.put('/likes/:articleId/:option', authenticator, validateArticleLike
 
 
 articleRoute.get('/', getArticlesByPage);
-
 articleRoute.post('/rating', authenticator, validateArticleRating, rateArticleHandler);
 articleRoute.get('/rating/:articleId', authenticator, validateGetArticleRating, getRatings);
 articleRoute.post('/report', authenticator, validateReportArticles, reportArticles.report);
@@ -33,6 +32,5 @@ articleRoute.get('/report', authenticator, reportArticles.getReported);
 articleRoute.get('/:articleId', validateGetArticleRating, getOneArticle);
 
 articleRoute.delete('/report/:articleId', authenticator, reportArticles.clearReported);
-
 
 export default articleRoute;

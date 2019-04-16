@@ -3,6 +3,7 @@ import models from '../../../models';
 import calculateReadTime from '../../../helpers/articleReadTime';
 import removeDuplicate from '../../../helpers/arrayDuplicateRemover';
 import authenticator from '../../../helpers/authenticator';
+import addToReadArticles from '../../../helpers/readingStats';
 
 const {
   articles, likes, users, ratings, comment, commentlikes, sequelize
@@ -165,6 +166,11 @@ export default class Article {
           error: 'Article not found'
         });
       }
+      if (article && user) {
+        const userid = authenticator.verifyToken(req.get('authorization')).id;
+        addToReadArticles(articleId, userid);
+      }
+
       const totalRatings = article.ratings.reduce((acc, curr) => acc + curr.rating, 0);
       const { comments } = article.toJSON();
       const commentsArray = comments.map(oneComment => ({
@@ -172,6 +178,9 @@ export default class Article {
         commentlikes: oneComment.commentlikes.filter(like => like.like === true).length,
         commentdislikes: oneComment.commentlikes.filter(like => like.like === false).length,
       }));
+
+      const articleLikes = article.likes.filter(like => like.like === true).length;
+      const articleDislikes = article.likes.filter(like => like.like === false).length;
       const articleDetails = {
         id: article.id,
         slug: article.slug,
@@ -183,8 +192,8 @@ export default class Article {
         isPremium: article.isPremium,
         createdAt: article.createdAt,
         user: article.user,
-        likes: article.likes.filter(like => like.like === true).length,
-        dislikes: article.likes.filter(like => like.like === false).length,
+        likes: articleLikes,
+        dislikes: articleDislikes,
         ratings: totalRatings,
         comments: commentsArray,
         bookmark: article.toJSON().bookmark
@@ -196,7 +205,7 @@ export default class Article {
         }
       });
     } catch (error) {
-      res.send(error);
+      return next(error);
     }
   }
 }
