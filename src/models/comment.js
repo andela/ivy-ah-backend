@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: true,
     },
+    highlight: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
   }, {});
   comment.associate = (models) => {
     comment.belongsTo(models.users, { foreignKey: 'author' });

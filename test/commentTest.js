@@ -67,6 +67,18 @@ describe('user is able to make comment', () => {
     expect(result.status).to.be.equal(201);
     expect(result.body.comment.body).to.deep.equal('this is commenting to a another comment .... this is commenting to a another comment');
   });
+  it('should comment on an article', async () => {
+    const result = await supertest(app)
+      .post(`/api/v1/articles/${testSlug}/comments`)
+      .set('authorization', currentToken)
+      .send({
+        body: 'testing for what',
+        highlightedText: 'this is a test comment',
+        textPosition: 11
+      });
+    expect(result.status).to.be.equal(201);
+    expect(result.body.comment.body).to.deep.equal('testing for what');
+  });
   it('should get a comment to an article', async () => {
     const result = await supertest(app)
       .get(`/api/v1/articles/${testSlug}/comments`);
