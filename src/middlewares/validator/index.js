@@ -185,6 +185,7 @@ class Validate {
       }));
   }
 
+
   /**
   * middleware for handling validation for like
   * and dislike request params
@@ -197,6 +198,23 @@ class Validate {
   */
   static validateCommentLikes(req, res, next) {
     validator(req.params, 'likeComment').then(() => next())
+      .catch(error => res.status(422).json({
+        status: 422, error,
+      }));
+  }
+
+  /**
+ *
+ * middleware for validating delete articles functionality
+ * @static
+ * @param {Request} req req object
+ * @param {Response} res res object
+ * @param {*} next called on validation success
+ * @return { void }
+ * @memberof Validate
+ */
+  static validateDeleteArticles(req, res, next) {
+    validator(req.params, 'deleteArticle').then(() => next())
       .catch(error => res.status(422).json({
         status: 422, error,
       }));
@@ -224,7 +242,7 @@ class Validate {
    * @param {obj} response
    * @param {function} next
    * @memberof Validate role update
-   * @return { void }
+   * @return {void}
    */
   static validateRoleUpdate(request, response, next) {
     const { role } = request.body;

@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   comment.associate = (models) => {
     comment.belongsTo(models.users, { foreignKey: 'author' });
-    comment.belongsTo(models.articles, { foreignKey: 'articleId' });
+    comment.belongsTo(models.articles, { foreignKey: 'articleId', onDelete: 'CASCADE', });
     comment.hasMany(comment, { foreignKey: 'parentCommentId', as: 'childComment' });
   };
   return comment;

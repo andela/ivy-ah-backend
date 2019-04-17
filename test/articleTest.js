@@ -352,4 +352,28 @@ describe('article reporting', () => {
     expect(result.status).to.equal(404);
     expect(result.body.error).to.deep.equal('article does not exist');
   });
+
+  it('it should throw a 422 error if given a wrong articleId', async () => {
+    const result = await server
+      .delete('/api/v1/articles/345353535535353533433')
+      .set('authorization', testToken)
+      .expect(422);
+    expect(result.status).to.equal(422);
+  });
+  // please note that this test must run last because it deletes the test article
+  it('it should delete an article', async () => {
+    const result = await server
+      .delete(`/api/v1/articles/${articleId}`)
+      .set('authorization', testToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+  });
+
+  it('it should not find a deleted article', async () => {
+    const result = await server
+      .delete(`/api/v1/articles/${articleId}`)
+      .set('authorization', testToken)
+      .expect(404);
+    expect(result.status).to.equal(404);
+  });
 });
