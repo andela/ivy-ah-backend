@@ -2,8 +2,11 @@ import generateSlug from '../../../helpers/slugGenerator';
 import models from '../../../models';
 import calculateReadTime from '../../../helpers/articleReadTime';
 import removeDuplicate from '../../../helpers/arrayDuplicateRemover';
+import authenticator from '../../../helpers/authenticator';
 
-const { articles } = models;
+const {
+  articles, likes, users, ratings, comment, commentlikes, sequelize
+} = models;
 /**
  *
  *
@@ -102,6 +105,98 @@ export default class Article {
     } catch (error) {
       error.customMessage = 'Delete failed. Try again later';
       return next(error);
+    }
+  }
+
+  /**
+ * @static
+ * @param {req} req - the request body
+ * @param {res} res - the response object
+ *  @param {next} next -  the next function
+ * @returns {article} article - an article
+ * @memberof Article class
+ */
+  static async getOneArticle(req, res, next) {
+    try {
+      const { articleId } = req.params;
+      let user;
+      if (req.get('authorization')) {
+        user = `'${authenticator.verifyToken(req.get('authorization')).id}'::uuid`;
+      }
+
+      const include = [
+        {
+          model: users,
+          attributes: ['username', 'bio', 'image']
+        },
+        {
+          model: comment,
+          include: [
+            { model: users, as: 'user', attributes: ['username', 'bio', 'image'] },
+            {
+              model: commentlikes,
+            },
+            {
+              model: comment,
+              as: 'childComment',
+              include: [{ model: commentlikes }, { model: users, as: 'user', attributes: ['username', 'bio', 'image'] }]
+            }
+          ]
+        },
+        {
+          model: likes,
+        },
+        {
+          model: ratings
+        }
+      ];
+      const article = await articles.findOne({
+        where: {
+          id: articleId,
+        },
+        attributes: {
+          include: [[sequelize.fn('exists', sequelize.literal(`SELECT * FROM bookmarks WHERE "user" = ${user || null} AND article = '${req.params.articleId}'::uuid`)), 'bookmark']],
+        },
+        include
+      });
+      if (!article) {
+        return res.status(404).json({
+          status: 404,
+          error: 'Article not found'
+        });
+      }
+      const totalRatings = article.ratings.reduce((acc, curr) => acc + curr.rating, 0);
+      const { comments } = article.toJSON();
+      const commentsArray = comments.map(oneComment => ({
+        ...oneComment,
+        commentlikes: oneComment.commentlikes.filter(like => like.like === true).length,
+        commentdislikes: oneComment.commentlikes.filter(like => like.like === false).length,
+      }));
+      const articleDetails = {
+        id: article.id,
+        slug: article.slug,
+        title: article.title,
+        body: article.body,
+        plainText: article.plainText,
+        tagList: article.tagList,
+        readTime: article.readTime,
+        isPremium: article.isPremium,
+        createdAt: article.createdAt,
+        user: article.user,
+        likes: article.likes.filter(like => like.like === true).length,
+        dislikes: article.likes.filter(like => like.like === false).length,
+        ratings: totalRatings,
+        comments: commentsArray,
+        bookmark: article.toJSON().bookmark
+      };
+      res.status(200).json({
+        status: 200,
+        data: {
+          ...articleDetails,
+        }
+      });
+    } catch (error) {
+      res.send(error);
     }
   }
 }

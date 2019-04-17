@@ -135,16 +135,6 @@ class Validate {
   * @return {void} void
   * @memberof validate
   */
-
-  /**
-  *  middleware for handling validation on getting article rating
-  * @static
-  * @param {Request} req request object
-  * @param {Response} res response object
-  * @param {Next} next called on validation success
-  * @return {void} void
-  * @memberof validate
-  */
   static validateGetArticleRating(req, res, next) {
     validator(req.params, 'getArticleRating').then(() => next())
       .catch(error => res.status(422).json({
@@ -236,11 +226,10 @@ class Validate {
 
   /**
    *
-   *
    * @static
    * @param {obj} request
    * @param {obj} response
-   * @param {function} next
+   * @param {Next} next
    * @memberof Validate role update
    * @return {void}
    */
