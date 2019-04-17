@@ -23,7 +23,10 @@ const body = joi.string().required().error(() => 'Body is required');
 const tagList = joi.array().required().error(() => 'tagList must be an array ');
 const plainText = joi.string().required().error(() => 'Plain text is required');
 
-const articleId = joi.string().guid().required().error(() => 'We do not know the article you are trying to rate. Please provide a valid article id');
+const articleId = joi.string().guid().required()
+  .error(() => 'We do not know the article you are referring to rate. Please provide a valid article id');
+const commentId = joi.string().guid().required()
+  .error(() => 'We do not know the comment you are referring to. Please provide a comment id');
 const rating = joi.number().integer().min(1).max(5)
   .required()
   .error(() => 'we know you really want to rate this article, but rating can only be number 1, 2, 3, 4, or 5');
@@ -71,7 +74,8 @@ const schemas = {
   validateArticleLikes: joi.object().keys({ articleId, option }),
   reportArticles: joi.object().keys({ reason, article }),
   comment: joi.object().keys({ body }),
-  userRole: joi.object().keys({ role })
+  userRole: joi.object().keys({ role }),
+  likeComment: joi.object().keys({ commentId, option })
 };
 
 /**
