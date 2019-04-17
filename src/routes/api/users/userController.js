@@ -13,14 +13,23 @@ class Users {
    */
   static async getAllUsers(req, res, next) {
     try {
-      const users = await db.users
-        .findAll({
+      const limit = req.query.limit ? req.query.limit : 30;
+      const offset = req.query.page ? limit * (req.query.page - 1) : 0;
+      const currentPage = req.query.page ? req.query.page : 1;
+      const { count, rows } = await db.users
+        .findAndCountAll({
+          offset,
+          limit,
           attributes: { exclude: ['password'] }
         });
+      const numberOfPages = limit ? (Math.ceil(count / limit)) : 1;
       return res.status(200)
         .json({
           status: 200,
-          users
+          numberOfPages,
+          numberOfUsers: count,
+          currentPage,
+          users: rows
         });
     } catch (err) {
       return next(err);
