@@ -54,6 +54,16 @@ describe('Test for user Login', () => {
       });
     expect(result.status).to.be.equal(400);
   });
+  it('Should return paginated list of users', async () => {
+    const users = await supertest(app).get('/api/v1/users/?page=1&limit=1')
+      .set('authorization', currentToken);
+    expect(users.status).to.equal(200);
+    expect(users.body).to.be.an('object');
+    expect(users.body).to.have.property('status');
+    expect(users.body).to.have.property('numberOfUsers');
+    expect(users.body).to.have.property('numberOfPages');
+    expect(users.body).to.have.property('users');
+  });
   it('should return an object', async () => {
     const result = await supertest(app)
       .post('/api/v1/users/login')
