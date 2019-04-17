@@ -13,10 +13,11 @@ class User {
    * method for handling user signup
    * @param {Request} request object
    * @param {Request} response object
+   * @param {next} next
    * @returns {void} void
    * @memberof User
    */
-  static async userSignup(request, response) {
+  static async userSignup(request, response, next) {
     try {
       const {
         username,
@@ -53,12 +54,13 @@ class User {
         },
       });
     } catch (err) {
-      return response.status(409).json({
-        status: 409,
-        errors: {
-          body: [err.message]
-        },
-      });
+      if (err.message === 'Email address already in use!') {
+        return response.status(409).json({
+          status: 409,
+          error: err.message,
+        });
+      }
+      return next(err);
     }
   }
 
