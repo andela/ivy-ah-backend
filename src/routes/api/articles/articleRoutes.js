@@ -8,10 +8,10 @@ import likeController from './likeController';
 import reportArticles from './reportArticles';
 import { postComment, getComment } from './commentController';
 
-const { createArticle, getArticlesByPage } = articleController;
+const { createArticle, getArticlesByPage, deleteSpecificArticle } = articleController;
 const {
   validateArticle, validateArticleSearch, validateArticleRating, validateGetArticleRating,
-  validateArticleLikes, validateReportArticles
+  validateArticleLikes, validateReportArticles, validateDeleteArticles
 } = validate;
 const { rateArticleHandler, getRatings } = rating;
 
@@ -25,12 +25,13 @@ articleRoute.get('/:articlesId/comments', getComment);
 articleRoute.post('/:parentCommentsId/comments/reply', authenticator, validate.comment, postComment);
 articleRoute.get('/:parentCommentsId/comments/reply', getComment);
 
+
 articleRoute.get('/', getArticlesByPage);
 
 articleRoute.post('/rating', authenticator, validateArticleRating, rateArticleHandler);
 articleRoute.get('/rating/:articleId', authenticator, validateGetArticleRating, getRatings);
 articleRoute.post('/report', authenticator, validateReportArticles, reportArticles.report);
-
+articleRoute.delete('/:articleId', authenticator, validateDeleteArticles, deleteSpecificArticle);
 articleRoute.get('/report', authenticator, reportArticles.getReported);
 
 articleRoute.delete('/report/:articleId', authenticator, reportArticles.clearReported);

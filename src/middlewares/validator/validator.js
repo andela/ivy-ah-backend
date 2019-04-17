@@ -24,7 +24,7 @@ const tagList = joi.array().required().error(() => 'tagList must be an array ');
 const plainText = joi.string().required().error(() => 'Plain text is required');
 
 const articleId = joi.string().guid().required()
-  .error(() => 'We do not know the article you are referring to rate. Please provide a valid article id');
+  .error(() => 'We do not know the article you are referring to. Please provide a valid article id');
 const commentId = joi.string().guid().required()
   .error(() => 'We do not know the comment you are referring to. Please provide a comment id');
 const rating = joi.number().integer().min(1).max(5)
@@ -75,7 +75,8 @@ const schemas = {
   reportArticles: joi.object().keys({ reason, article }),
   comment: joi.object().keys({ body }),
   userRole: joi.object().keys({ role }),
-  likeComment: joi.object().keys({ commentId, option })
+  likeComment: joi.object().keys({ commentId, option }),
+  deleteArticle: joi.object().keys({ articleId }),
 };
 
 /**
