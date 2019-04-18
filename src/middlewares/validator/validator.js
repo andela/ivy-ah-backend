@@ -36,6 +36,10 @@ const rating = joi.number().integer().min(1).max(5)
   .required()
   .error(() => 'we know you really want to rate this article, but rating can only be number 1, 2, 3, 4, or 5');
 
+const timeline = joi.number().integer().min(1)
+  .required()
+  .error(() => 'the timeline can only be a number greater than 1');
+
 const option = joi.string().required().regex(/^(like|dislike)$/).error(() => 'Options can only be like or dislike');
 
 const keyword = joi.string()
@@ -81,6 +85,7 @@ const schemas = {
   likeComment: joi.object().keys({ commentId, option }),
   deleteArticle: joi.object().keys({ articleId }),
   comment: joi.object().keys({ body, highlightedText, textPosition }).and('highlightedText', 'textPosition').error(() => "'highlightedText' and 'textPosition fields should not be empty'"),
+  timeline: joi.object().keys({ timeline })
 };
 
 /**

@@ -264,6 +264,22 @@ class Validate {
         error,
       }));
   }
+
+  /**  middleware for handling validation on getting reading statistics
+ * @static
+ * @param {Request} req
+ * @param {Response} res
+ * @param {function} next
+ * @return { void }
+ * @memberof validate
+ */
+  static validateTimeline(req, res, next) {
+    validator(req.params, 'timeline').then(() => next())
+      .catch(error => res.status(422).json({
+        status: 422,
+        error,
+      }));
+  }
 }
 
 export default Validate;
