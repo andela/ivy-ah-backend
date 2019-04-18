@@ -2,17 +2,16 @@ import models from '../../../models';
 
 const { users, comment } = models;
 
-// const { articles, users, comment } = models;
 /**
  *
  *
  * @export
- * @class Articles
+ * @class Comment
  */
 class Comment {
 /**
  *
- *
+ * this method creates comments
  * @static
  * @param {request} req
  * @param {response} res
@@ -21,7 +20,10 @@ class Comment {
  * @returns {void}
  */
   static async postComment(req, res, next) {
-    const { body } = req.body;
+    const {
+      body, highlightedText,
+      textPosition
+    } = req.body;
     let articleId, parentCommentId;
     if (!req.params.articlesId) {
       parentCommentId = req.params.parentCommentsId;
@@ -29,17 +31,23 @@ class Comment {
       articleId = req.params.articlesId;
     }
     try {
+      const highlight = {
+        highlightedText,
+        textPosition
+      };
       const newComment = await comment.create({
         articleId,
         parentCommentId,
         body,
+        highlight,
         author: req.user.id
       });
       if (newComment) {
         return res.status(201).json({
           comment: {
             id: newComment.id,
-            body: newComment.body
+            body: newComment.body,
+            highlight: newComment.highlight,
           },
         });
       }
@@ -51,6 +59,7 @@ class Comment {
   /**
  *
  *
+ * this method gets comments
  * @static
  * @param {request} req
  * @param {response} res
@@ -88,6 +97,7 @@ class Comment {
         createdAt: oneComment.createdAt,
         updatedAt: oneComment.updatedAt,
         body: oneComment.body,
+        highlight: oneComment.highlight,
         author: {
           username: oneComment.user.username,
           bio: oneComment.user.bio,
