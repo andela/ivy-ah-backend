@@ -1,8 +1,11 @@
 import joi from 'joi';
 
 const username = joi.string().alphanum().min(3).max(10)
-  .error(() => 'username must contain between 3 and 10 alphanumeric characters')
-  .required();
+  .error(() => 'username must contain between 3 and 10 alphanumeric characters');
+const firstname = joi.string().alphanum().min(3).max(225)
+  .error(() => 'firstname must contain between 3 and 225 alphanumeric characters');
+const lastname = joi.string().alphanum().min(3).max(225)
+  .error(() => 'lastname must contain between 3 and 225 alphanumeric characters');
 
 const email = joi.string().email()
   .error(() => 'email must be in the format john@example.com')
@@ -45,12 +48,9 @@ const author = joi.string()
   .error(() => 'author must be a string');
 
 const updateSchema = joi.object().keys({
-  username: joi.string().alphanum().min(3).max(10)
-    .error(() => 'username must contain between 3 and 10 alphanumeric characters'),
-  firstname: joi.string().alphanum().min(3).max(225)
-    .error(() => 'firstname must contain between 3 and 225 alphanumeric characters'),
-  lastname: joi.string().alphanum().min(3).max(225)
-    .error(() => 'lastname must contain between 3 and 225 alphanumeric characters'),
+  username,
+  firstname,
+  lastname,
   email: joi.string().email()
     .error(() => 'email must be in the format john@example.com')
 }).or('username', 'email', 'firstname', 'lastname');
@@ -63,7 +63,9 @@ const article = joi.string()
 
 const schemas = {
   userLogin: joi.object().keys({ email, password }),
-  userSignup: joi.object().keys({ username, email, password }),
+  userSignup: joi.object().keys({
+    firstname, lastname, username, email, password
+  }),
   articles: joi.object().keys({
     title, description, body, tagList, plainText
   }),
