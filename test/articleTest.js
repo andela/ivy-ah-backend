@@ -250,6 +250,28 @@ describe('article like', () => {
     expect(result.body.data.dislikes).to.equal(null);
   });
 });
+describe('article update', () => {
+  it('should update an article', async () => {
+    const result = await server.patch(`/api/v1/articles/${articleId}`)
+      .set('authorization', testToken)
+      .send({
+        body: 'it is not good',
+        plainText: 'jsjfosdf'
+      }).expect(201);
+    expect(result.status).to.equal(201);
+    expect(result.body.article.body).to.equal('it is not good');
+    expect(result.body.article.plainText).to.equal('jsjfosdf');
+  });
+  it('should update an article', async () => {
+    const result = await server.patch(`/api/v1/articles/${articleId}`)
+      .set('authorization', testToken)
+      .send({
+        body: 'it is not good',
+        plainText: 'jsjfosdf'
+      }).expect(201);
+    expect(result.status).to.equal(201);
+  });
+});
 describe('article reporting', () => {
   let articleid;
 

@@ -8,16 +8,19 @@ import likeController from './likeController';
 import reportArticles from './reportArticles';
 import { postComment, getComment } from './commentController';
 
-const { createArticle, getArticlesByPage, deleteSpecificArticle } = articleController;
+const {
+  createArticle, updateArticle, getArticlesByPage, deleteSpecificArticle
+} = articleController;
 const {
   validateArticle, validateArticleSearch, validateArticleRating, validateGetArticleRating,
-  validateArticleLikes, validateReportArticles, validateDeleteArticles
+  validateArticleLikes, validateReportArticles, validateDeleteArticles, validateUpdateArticle
 } = validate;
 const { rateArticleHandler, getRatings } = rating;
 
 const articleRoute = Router();
 
 articleRoute.post('/', authenticator, validateArticle, createArticle);
+articleRoute.patch('/:articleId', authenticator, validateUpdateArticle, updateArticle);
 articleRoute.get('/search', validateArticleSearch, searchArticles);
 articleRoute.put('/likes/:articleId/:option', authenticator, validateArticleLikes, likeController);
 articleRoute.post('/:articlesId/comments', authenticator, validate.comment, postComment);

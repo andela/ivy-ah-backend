@@ -95,6 +95,23 @@ class Validate {
   }
 
   /**
+ *  middleware for handling validation on article creation
+ * @static
+ * @param {Request} req
+ * @param {Response} res
+ * @param {function} next
+ * @return { void }
+ * @memberof validate
+ */
+  static validateUpdateArticle(req, res, next) {
+    validator(req.body, 'updateArticles').then(() => next())
+      .catch(error => res.status(422).json({
+        status: 422,
+        error,
+      }));
+  }
+
+  /**
   *  middleware for handling validation on article search
   * @static
   * @param {Request} req request object
