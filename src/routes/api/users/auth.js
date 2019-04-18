@@ -2,6 +2,8 @@
 import db from '../../../models/index';
 import authenticator from '../../../helpers/authenticator';
 import PasswordHasher from '../../../helpers/PasswordHasher';
+import emailSender from '../../../helpers/emailSender';
+import Templates from '../../../helpers/Templates';
 
 /**
  *
@@ -42,8 +44,13 @@ class User {
       const token = await authenticator.generateToken({
         email: user.email, id: user.id, role: user.role
       });
+
+      const confirmEmailPage = `${request.protocol}://${request.get('host')}/confirmation/${token}`;
+
+      await emailSender(email, 'Please Confirm Your Email', Templates.confirmEmail(confirmEmailPage, email));
       return response.status(201).json({
         status: 201,
+        message: 'Verification mail has been sent to user',
         user: {
           userid: user.id,
           email,

@@ -85,6 +85,7 @@ const schemas = {
     plainText: title.required()
   }),
   forgotPassword: joi.object().keys({ email }),
+  resendMail: joi.object().keys({ email }),
   resetPassword: joi.object().keys({ password, resetToken }),
   articleSearch: joi.object().keys({ keyword, tags, author }).or(['keyword', 'tags', 'author']).error(() => 'a valid search parameter must be provided'),
   articleRating: joi.object().keys({ articleId, rating }),
