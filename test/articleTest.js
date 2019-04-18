@@ -410,6 +410,19 @@ describe('article reporting', () => {
       .expect(422);
     expect(result.status).to.equal(422);
   });
+
+  it('it should return the articles created by a specific user', async () => {
+    const result = await server
+      .get('/api/v1/users/articles')
+      .set('authorization', testToken)
+      .expect(200);
+    expect(result.status).to.equal(200);
+    expect(result.body).to.be.an('object');
+    expect(result.body).to.have.property('pageCount');
+    expect(result.body).to.have.property('articleCount');
+    expect(result.body).to.have.property('currentPage');
+    expect(result.body).to.have.property('articles');
+  });
   // please note that this test must run last because it deletes the test article
   it('it should delete an article', async () => {
     const result = await server
