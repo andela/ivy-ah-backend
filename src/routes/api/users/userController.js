@@ -1,4 +1,6 @@
 import db from '../../../models/index';
+
+const { articles } = db;
 /**
  * @class Users
  */
@@ -71,6 +73,43 @@ class Users {
       });
     } catch (err) {
       return next(err);
+    }
+  }
+
+  /**
+ *
+ * this function gets all articles created by a specific
+ * user
+ * @static
+ * @param {Request} req request object
+ * @param {Response} res response object
+ * @param {Next} next called if there is an error
+ * @memberof Users
+ * @return { void }
+ */
+  static async getUserArticles(req, res, next) {
+    try {
+      const limit = req.query.limit ? req.query.limit : 30;
+      const offset = req.query.page ? limit * (req.query.page - 1) : 0;
+      const currentPage = req.query.page ? req.query.page : 1;
+      const { count, rows } = await articles
+        .findAndCountAll({
+          offset,
+          limit,
+          where: { author: req.user.id },
+          attributes: { exclude: ['author'] },
+        });
+      const pageCount = limit ? (Math.ceil(count / limit)) : 1;
+      return res.status(200)
+        .json({
+          status: 200,
+          pageCount,
+          articleCount: count,
+          currentPage,
+          articles: rows
+        });
+    } catch (error) {
+      return next(error);
     }
   }
 }
