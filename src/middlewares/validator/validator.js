@@ -22,11 +22,11 @@ const resetToken = joi.string().trim().regex(/^[\w\W]+\.[\w\W]+\.[\w\W]+$/)
 const highlightedText = joi.string().error(() => 'invalid highlighted text');
 const textPosition = joi.number().integer().error(() => 'position must be an integer');
 const role = joi.string().trim().required().error(() => 'Role is required');
-const title = joi.string().required().error(() => 'Title is required');
-const description = joi.string().required().error(() => 'description is required');
-const body = joi.string().required().error(() => 'Body is required');
-const tagList = joi.array().required().error(() => 'tagList must be an array ');
-const plainText = joi.string().required().error(() => 'Plain text is required');
+const title = joi.string();
+const description = joi.string();
+const body = joi.string();
+const tagList = joi.array();
+const plainText = joi.string();
 
 const articleId = joi.string().guid().required()
   .error(() => 'We do not know the article you are referring to. Please provide a valid article id');
@@ -66,8 +66,19 @@ const schemas = {
   userSignup: joi.object().keys({
     firstname, lastname, username, email, password
   }),
+  updateArticles: joi.object().keys({
+    title,
+    description,
+    body,
+    tagList,
+    plainText
+  }).and('body', 'plainText').error(() => 'body and plainText field must be present'),
   articles: joi.object().keys({
-    title, description, body, tagList, plainText
+    title: title.required(),
+    description: description.required(),
+    body: body.required(),
+    tagList: tagList.required(),
+    plainText: title.required()
   }),
   forgotPassword: joi.object().keys({ email }),
   resetPassword: joi.object().keys({ password, resetToken }),

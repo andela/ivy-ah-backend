@@ -8,11 +8,11 @@ import likeController from './likeController';
 import reportArticles from './reportArticles';
 
 const {
-  createArticle, getArticlesByPage, deleteSpecificArticle, getOneArticle
+  createArticle, updateArticle, getArticlesByPage, deleteSpecificArticle, getOneArticle
 } = articleController;
 const {
   validateArticle, validateArticleSearch, validateArticleRating, validateGetArticleRating,
-  validateArticleLikes, validateReportArticles, validateDeleteArticles
+  validateArticleLikes, validateReportArticles, validateDeleteArticles, validateUpdateArticle
 } = validate;
 const { rateArticleHandler, getRatings } = rating;
 
@@ -26,6 +26,7 @@ articleRoute.put('/likes/:articleId/:option', authenticator, validateArticleLike
 articleRoute.get('/', getArticlesByPage);
 
 articleRoute.post('/rating', authenticator, validateArticleRating, rateArticleHandler);
+articleRoute.patch('/:articleId', authenticator, validateUpdateArticle, updateArticle);
 articleRoute.get('/rating/:articleId', authenticator, validateGetArticleRating, getRatings);
 articleRoute.post('/report', authenticator, validateReportArticles, reportArticles.report);
 articleRoute.delete('/:articleId', authenticator, validateDeleteArticles, deleteSpecificArticle);
