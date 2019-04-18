@@ -55,13 +55,11 @@ class ImageControl {
    */
   static deleteImage(url) {
     return new Promise((res, rej) => {
-      cloudinary.v2.api.delete_resources(
-        extractId(url),
+      cloudinary.v2.api.delete_resources(extractId(url),
         (error, result) => {
           if (error) return rej(error);
           res(result);
-        }
-      );
+        });
     });
   }
 }

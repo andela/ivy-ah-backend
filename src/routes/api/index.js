@@ -7,6 +7,7 @@ import articleRoute from './articles/articleRoutes';
 import bookmarkRoute from './bookmarks/bookmarkRoute';
 import adminRoute from './admin/adminRoute';
 import commentRoute from './comments/commentRoutes';
+import imageRoute from './images/imageRoute';
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.use('/profiles', profilesRouter);
 router.use('/articles', articleRoute);
 router.use('/admin', adminRoute);
 router.use('/comments', commentRoute);
+router.use('/images', imageRoute);
 
 router.use('/bookmarks', bookmarkRoute);
 module.exports = router;
