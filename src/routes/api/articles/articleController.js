@@ -54,6 +54,52 @@ export default class Article {
   }
 
   /**
+ * this method updates an article
+ * @static
+ * @param {Request} request
+ * @param {Response} response
+ * @param {function} next
+ * @memberof Articles
+ * @returns {void}
+ */
+  static async updateArticle(request, response, next) {
+    try {
+      const updates = Object.assign({}, request.body);
+      if (updates.title) {
+        updates.slug = generateSlug(updates.title);
+      }
+      if (updates.tagList) {
+        updates.tagList = removeDuplicate(updates.tagList);
+      }
+      if (updates.plainText) {
+        updates.readTime = calculateReadTime(updates.plainText);
+      }
+      const result = await articles.update(updates,
+        {
+          where: {
+            id: request.params.articleId,
+            author: request.user.id,
+          },
+          returning: true,
+        });
+      const affectedRows = result[0];
+      if (affectedRows !== 1) {
+        return response.status(404).json({
+          status: 404,
+          error: 'did not find this article in the list of articles you authored'
+        });
+      }
+      const { dataValues } = result[1][0];
+      return response.status(201).json({
+        status: 201,
+        article: dataValues,
+      });
+    } catch (err) {
+      return next(err);
+    }
+  }
+
+  /**
  * @static
  * @param {obj} request
  * @param {ogj} response

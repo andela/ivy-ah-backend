@@ -251,6 +251,53 @@ describe('article like', () => {
   });
 });
 
+describe('article update', () => {
+  it('should not update an article if it doesnt belong to user', async () => {
+    const result = await server.patch('/api/v1/articles/04040f11-c6e9-426c-bce7-75e7f6dad14c')
+      .set('authorization', testToken)
+      .send({
+        body: 'it is not good',
+        plainText: 'jsjfosdf'
+      }).expect(404);
+    expect(result.status).to.equal(404);
+    expect(result.body.error).to.equal('did not find this article in the list of articles you authored');
+  });
+  it('should update an article', async () => {
+    const result = await server.patch(`/api/v1/articles/${articleId}`)
+      .set('authorization', testToken)
+      .send({
+        body: 'it is not good',
+        plainText: 'jsjfosdf'
+      }).expect(201);
+    expect(result.status).to.equal(201);
+  });
+  it('should generate a new slog if title was updated', async () => {
+    const result = await server.patch(`/api/v1/articles/${articleId}`)
+      .set('authorization', testToken)
+      .send({
+        title: 'the new title',
+        body: 'it is not good',
+        plainText: 'jsjfosdf'
+      }).expect(201);
+    expect(result.status).to.equal(201);
+    expect(result.body.article).to.have.property('slug');
+    expect(result.body.article.body).to.equal('it is not good');
+    expect(result.body.article.plainText).to.equal('jsjfosdf');
+  });
+  it('should calculate the readtime if body was updated', async () => {
+    const result = await server.patch(`/api/v1/articles/${articleId}`)
+      .set('authorization', testToken)
+      .send({
+        title: 'the new title',
+        body: 'it is not good',
+        plainText: 'jsjfosdf'
+      }).expect(201);
+    expect(result.status).to.equal(201);
+    expect(result.body.article).to.have.property('readTime');
+    expect(result.body.article.body).to.equal('it is not good');
+    expect(result.body.article.plainText).to.equal('jsjfosdf');
+  });
+});
 
 describe('GET Article', () => {
   it('should return a single article for a verified user', async () => {
