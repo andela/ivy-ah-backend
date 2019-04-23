@@ -8,7 +8,7 @@ import { sendPasswordResetToken, resetPassword, } from './passwordReset';
 import validate from '../../../middlewares/validator';
 import Users from './userController';
 import checkToken from '../../../middlewares/authorization';
-import authenticator from '../../../middlewares/authorization';
+import authorizeAdmin from '../../../middlewares/authorizeAdmin';
 
 const usersRoute = express.Router();
 const { getUserArticles } = Users;
@@ -17,9 +17,9 @@ usersRoute.post('/signup', validate.userSignup, userSignup);
 usersRoute.post('/login', validate.userLogin, userLogin);
 usersRoute.post('/forgotpassword', validate.forgotPassword, sendPasswordResetToken);
 usersRoute.patch('/resetpassword', validate.resetPassword, resetPassword);
-usersRoute.get('/', checkToken, Users.getAllUsers);
+usersRoute.get('/', checkToken, authorizeAdmin, Users.getAllUsers);
 usersRoute.patch('/', validate.validateUpdateUser, checkToken, Users.updateUser);
-usersRoute.get('/articles', authenticator, getUserArticles);
+usersRoute.get('/articles', checkToken, getUserArticles);
 usersRoute.get('/home', (req, res) => {
   res.send('every damn thing is working fine');
 });

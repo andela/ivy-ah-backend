@@ -4,7 +4,7 @@ const authorizeModerator = (request, response, next) => {
   }
   return response.status(401).json({
     status: 401,
-    error: 'Access Denied. Accessible By Moderator And Admin Only'
+    error: 'Access Denied. You are not authorized to access this resource'
   });
 };
 

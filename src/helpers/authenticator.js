@@ -13,8 +13,8 @@ class authenticator {
    * @returns {String} jwt token
    * @memberof authenticator
    */
-  static generateToken(payload, key = process.env.JWT_SECRET, options = { expiresIn: '24h' }) {
-    return jwt.sign(payload, key, options);
+  static generateToken(payload, key = process.env.JWT_SECRET) {
+    return jwt.sign(payload, key);
   }
 
   /**
