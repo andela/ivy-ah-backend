@@ -60,6 +60,24 @@ class Validate {
   }
 
   /**
+   * this method validates the email
+   *
+   * @static
+   * @param {obj} req
+   * @param {obj} res
+   * @param {obj} next
+   * @return {void}
+   * @memberof Validate
+   */
+  static resendMail(req, res, next) {
+    validator(req.body, 'resendMail').then(() => next())
+      .catch(error => res.status(422).json({
+        status: 422,
+        error,
+      }));
+  }
+
+  /**
    * middleware for handling requesting password reset
    * passes over duty to next middleware on success or sends
    * an error response otherwise

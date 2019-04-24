@@ -19,6 +19,7 @@ before(async () => {
   const result = await server
     .post('/api/v1/users/signup')
     .send(user);
+  expect(result.body.user).to.be.an('object');
   testToken = result.body.user.token;
 });
 

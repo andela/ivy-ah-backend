@@ -11,6 +11,7 @@ let currentToken = 'notoken';
 let adminToken;
 let Userid;
 let testId;
+let verifyToken;
 
 describe('Test for user auth', () => {
   before(async () => {
@@ -24,6 +25,7 @@ describe('Test for user auth', () => {
         email: 'cosssy@coos.com',
         password: 'aapppplee',
       });
+    verifyToken = result.body.user.token;
     expect(result.status).to.be.equal(201);
   });
   it('should return 200 for correct credentials', async () => {
@@ -53,6 +55,32 @@ describe('Test for user auth', () => {
         password: 'aapppplee',
       });
     expect(result.status).to.be.equal(400);
+  });
+  it('should return 404 for incorrect email', async () => {
+    const result = await supertest(app)
+      .post('/api/v1/users/login')
+      .send({
+        email: 'cosssy@coo.com',
+        password: 'aapppplee',
+      });
+    expect(result.status).to.be.equal(400);
+  });
+  it('Should verify a new user', async () => {
+    const users = await supertest(app).patch(`/api/v1/users/confirmation/${verifyToken}`)
+      .set('authorization', currentToken);
+    expect(users.status).to.equal(200);
+    expect(users.body).to.be.an('object');
+    expect(users.body).to.have.property('status');
+    expect(users.body).to.have.property('message');
+  });
+  it('Should verify a new user', async () => {
+    const users = await supertest(app).post('/api/v1/users/resendconfirmation')
+      .send({ email: 'cosssy@coos.com' })
+      .set('authorization', currentToken);
+    expect(users.status).to.equal(200);
+    expect(users.body).to.be.an('object');
+    expect(users.body).to.have.property('status');
+    expect(users.body).to.have.property('message');
   });
   it('should return an object', async () => {
     const result = await supertest(app)

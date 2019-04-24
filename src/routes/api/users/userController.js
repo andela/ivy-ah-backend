@@ -1,4 +1,7 @@
+import authenticator from '../../../helpers/authenticator';
 import db from '../../../models/index';
+import emailSender from '../../../helpers/emailSender';
+import Templates from '../../../helpers/Templates';
 
 const { articles } = db;
 /**
@@ -54,7 +57,6 @@ class Users {
         isVerified, isSubscribed, role, email, bio, image, createdAt, updatedAt,
         username, firstname, lastname
       } = data[0].dataValues;
-
       return res.status(200).json({
         status: 200,
         user: {
@@ -112,5 +114,95 @@ class Users {
       return next(error);
     }
   }
+
+  /**
+  * this method verifies user email
+  *
+  * @static
+  * @param {obj} request
+  * @param {obj} response
+  * @param {function} next
+  * @returns {void}
+  * @memberof Users
+  */
+  static async confirmEmail(request, response, next) {
+    try {
+      const { token } = request.params;
+      const { email } = authenticator.verifyToken(token);
+      const user = await db.users.findOne({ where: { email } });
+      if (user.isVerified) {
+        response.status(400).json({
+          status: 400,
+          error: 'Email Already Verified'
+        });
+      }
+      const [, updatedUser] = await db.users.update({ isVerified: true }, {
+        where: { email },
+        returning: true,
+      });
+      const {
+        username, firstname, lastname, isVerified,
+        isSubscribed, role, bio, image, createdAt, updatedAt
+      } = updatedUser[0].dataValues;
+
+      const loginPage = `${request.protocol}://${request.get('host')}/login`;
+
+      emailSender(email, 'Email confirmation successful', Templates.emailConfirmed(loginPage, email));
+      return response.status(200).json({
+        status: 200,
+        message: 'Email Confirmation Successful',
+        user: {
+          username,
+          firstname,
+          lastname,
+          email,
+          isVerified,
+          isSubscribed,
+          role,
+          bio,
+          image,
+          createdAt,
+          updatedAt
+        }
+      });
+    } catch (err) {
+      return next(err);
+    }
+  }
+
+  /**
+   *
+   * This method resends verification mail
+   * @static
+   * @param {obj} request
+   * @param {obj} response
+   * @param {function} next
+   * @returns {void}
+   * @memberof Users
+   */
+  static async resendMail(request, response, next) {
+    try {
+      const { email } = request.body;
+      const user = await db.users.findOne({ where: { email } });
+      if (!user) {
+        response.status(400).json({
+          status: 400,
+          error: 'Email Does not exist'
+        });
+      }
+      const token = await authenticator.generateToken({ email });
+
+      const confirmEmailPage = `${request.protocol}://${request.get('host')}/confirmation/${token}`;
+
+      await emailSender(email, 'Please Confirm Your Email', Templates.confirmEmail(confirmEmailPage, email));
+      return response.status(200).json({
+        status: 200,
+        message: 'Verification mail has been sent to user'
+      });
+    } catch (err) {
+      return next(err);
+    }
+  }
 }
+
 export default Users;

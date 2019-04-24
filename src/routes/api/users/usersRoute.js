@@ -14,6 +14,8 @@ const usersRoute = express.Router();
 const { getUserArticles } = Users;
 
 usersRoute.post('/signup', validate.userSignup, userSignup);
+usersRoute.patch('/confirmation/:token', Users.confirmEmail);
+usersRoute.post('/resendconfirmation', validate.resendMail, Users.resendMail);
 usersRoute.post('/login', validate.userLogin, userLogin);
 usersRoute.post('/forgotpassword', validate.forgotPassword, sendPasswordResetToken);
 usersRoute.patch('/resetpassword', validate.resetPassword, resetPassword);
