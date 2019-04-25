@@ -1,107 +1,2001 @@
 {
-    "swagger": "2.0",
-    "info": {
-       "description": "This app brings together a of community of like minded authors to foster inspiration and innovation by leveraging the modern web.",
-       "version": "1.0.0",
-       "title": "Authors Haven",
-       "termsOfService": "http://andela.com",
-       "contact": {
-          "email": "info@andela.com"
+   "swagger": "2.0",
+   "info": {
+     "description": "This app brings together a of community of like minded authors to foster inspiration and innovation by leveraging the modern web.",
+     "version": "1.0.0",
+     "title": "Authors Haven",
+     "termsOfService": "http://andela.com",
+     "contact": {
+       "email": "info@andela.com"
+     },
+     "license": {
+       "name": "Apache 2.0",
+       "url": "https://ivy-ah-backend-staging.herokuapp.com/"
+     }
+   },
+   "host": "ivy-ah-backend-staging.herokuapp.com",
+   "basePath": "/api/v1",
+   "tags": [
+     {
+       "name": "Users",
+       "description": "Authentication",
+       "externalDocs": {
+         "description": "",
+         "url": "https://ivy-ah-backend.herokuapp.com"
+       }
+     }
+   ],
+   "schemes": [
+     "https"
+   ],
+   "securityDefinitions": {
+     "authorization": {
+       "type": "apiKey",
+       "in": "header",
+       "name": "authorization"
+     }
+   },
+   "paths": {
+     "/users/signup": {
+       "post": {
+         "tags": [
+           "Users"
+         ],
+         "summary": "Register a new user",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "body",
+             "name": "body",
+             "description": "json object of user details",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/userSignup"
+             }
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/users/login": {
+       "post": {
+         "tags": [
+           "Users"
+         ],
+         "summary": "Login a registered user into the app",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "body",
+             "name": "body",
+             "description": "json object of user details",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/userSignup"
+             }
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/users/forgotpassword": {
+       "post": {
+         "tags": [
+           "Users"
+         ],
+         "summary": "Request for password reset token",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "body",
+             "name": "email",
+             "description": "json object of user email",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/forgotPassword"
+             }
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "404": {
+             "description": "User does not exist"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/users/resetpassword": {
+       "patch": {
+         "tags": [
+           "Users"
+         ],
+         "summary": "Reset password",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "body",
+             "name": "password",
+             "description": "json object of new password",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/resetPassword"
+             }
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "404": {
+             "description": "User does not exist"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/profiles/{id}": {
+       "get": {
+         "tags": [
+           "Users"
+         ],
+         "summary": "Get the profile of a user",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "id",
+             "description": "uuid of the user",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/users": {
+       "patch": {
+         "tags": [
+           "Users"
+         ],
+         "summary": "Update user account",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "body",
+             "name": "body",
+             "description": "json object of user details",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/updateUser"
+             }
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/admin": {
+       "get": {
+         "tags": [
+           "Admin"
+         ],
+         "summary": "Get Admin users and moderators",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           }
+         }
+       }
+     },
+     "/admin/role/{id}": {
+       "patch": {
+         "tags": [
+           "Admin"
+         ],
+         "summary": "Change the role of a user",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "id",
+             "description": "uuid of the user",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           },
+           {
+             "in": "body",
+             "name": "role",
+             "description": "json object of user role",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/role"
+             }
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           }
+         }
+       }
+     },
+     "/articles": {
+       "post": {
+         "tags": [
+           "Articles"
+         ],
+         "summary": "Create an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "body",
+             "name": "body",
+             "description": "json object of user details",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/article"
+             }
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
        },
-       "license": {
-          "name": "Apache 2.0",
-          "url": "https://ivy-ah-backend.herokuapp.com/"
-       }
-    },
-    "host": "ivy-ah-backend.herokuapp.com",
-    "basePath": "/api",
-    "tags": [
-       {
-          "name": "Users",
-          "description": "Authentication",
-          "externalDocs": {
-             "description": "",
-             "url": "https://ivy-ah-backend.herokuapp.com"
-          }
-       }
-    ],
-    "schemes": [
-       "https"
-    ],
-    "paths": {
-       "/Users": {
-          "post": {
-             "tags": [
-                "Users"
-             ],
-             "summary": "Log user into the app",
-             "description": "",
-             "operationId": "",
-             "consumes": [
-                "application/json"
-             ],
-             "produces": [
-                "application/json"
-             ],
-             "parameters": [
-                {
-                   "in": "body",
-                   "name": "body",
-                   "description": "json object of user details",
-                   "required": true,
-                   "schema": {
-                      "$ref": "#/definitions/userLogin"
-                   }
-                }
-             ],
-             "responses": {
-                "200": {
-                   "description": "success",
-                   "schema": {
-                      "$ref": "#/definitions/success"
-                   }
-                },
-                "400": {
-                   "description": "invalid request"
-                },
-                "401": {
-                   "description": "unauthorized"
-                }
+       "get": {
+         "tags": [
+           "Articles"
+         ],
+         "summary": "Get articles by page",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "query",
+             "name": "offset",
+             "type": "integer",
+             "description": "The number of articles to skip before starting to collect the result set"
+           },
+           {
+             "in": "query",
+             "name": "limit",
+             "type": "integer",
+             "description": "The numbers of articles to return."
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
              }
-          }
+           },
+           "401": {
+             "description": "unauthorized"
+           }
+         }
        }
-    },
-    "definitions": {
-       "userLogin": {
-          "type": "object",
-          "required": [
-             "email",
-             "password"
-          ],
-          "properties": {
-             "email": {
-                "type": "string",
-                "example": "mail@email.com"
-             },
-             "password": {
-                "type": "string",
-                "example": "yourPassword"
+     },
+     "/articles/{articleId}": {
+       "get": {
+         "tags": [
+           "Articles"
+         ],
+         "summary": "Get a single article by Id",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "articleId",
+             "description": "uuid of the article",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
              }
-          }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
        },
-       "success": {
-          "type": "object",
-          "properties": {
-             "status": {
-                "type": "integer",
-                "example": 200
-             },
-             "message": {
-                "type": "string",
-                "example": "successful"
+       "patch": {
+         "tags": [
+           "Articles"
+         ],
+         "summary": "Update an existing article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "articleId",
+             "description": "uuid of the article",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
              }
-          }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "did not find this article in the list of articles you authored"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       },
+       "delete": {
+         "tags": [
+           "Articles"
+         ],
+         "summary": "Delete a Specific article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "articleId",
+             "description": "uuid of the article",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "The article you want to delete is not found"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
        }
-    }
+     },
+     "/articles/likes/{articleId}/{option}": {
+       "put": {
+         "tags": [
+           "Articles"
+         ],
+         "summary": "Like/Dislike an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "articleId",
+             "description": "uuid of the article",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           },
+           {
+             "in": "path",
+             "name": "option",
+             "description": "option can either be like or dislike",
+             "required": true,
+             "type": "string"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "Article Not Found"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/articles/rating": {
+       "post": {
+         "tags": [
+           "Articles"
+         ],
+         "summary": "Rate an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "body",
+             "name": "body",
+             "description": "json object of article rating",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/articleRating"
+             }
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "Article Not Found"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/articles/rating/{articleId}": {
+       "get": {
+         "tags": [
+           "Articles"
+         ],
+         "summary": "Get the total ratings of an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "articleId",
+             "description": "uuid of the article",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/articles/report": {
+       "post": {
+         "tags": [
+           "Articles"
+         ],
+         "summary": "Report an Article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "body",
+             "name": "body",
+             "description": "json object of article rating",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/articleReporting"
+             }
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "Article does not exist"
+           },
+           "409": {
+             "description": "Article already reported by user"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       },
+       "get": {
+         "tags": [
+           "Articles"
+         ],
+         "summary": "Get a list of the reported articles",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           }
+         }
+       }
+     },
+     "/articles/report/{articleId}": {
+       "delete": {
+         "tags": [
+           "Articles"
+         ],
+         "summary": "Delete an article report",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "articleId",
+             "description": "uuid of the article",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "Article has not been reported"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/profiles/{authorId}/follow": {
+       "post": {
+         "tags": [
+           "Follow User"
+         ],
+         "summary": "Follows an author by Id",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "authorId",
+             "description": "uuid of the author to be followed",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "409": {
+             "description": "already following the author"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       },
+       "delete": {
+         "tags": [
+           "Follow User"
+         ],
+         "summary": "Unfollows an author by Id",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "authorId",
+             "description": "uuid of the author to be unfollowed",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "404": {
+             "description": "You are not following this author"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/profiles/{authorId}/followers": {
+       "get": {
+         "tags": [
+           "Follow User"
+         ],
+         "summary": "Get the Followers of an author",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "authorId",
+             "description": "uuid of the author",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/profiles/{authorId}/following": {
+       "get": {
+         "tags": [
+           "Follow User"
+         ],
+         "summary": "Get the list of users an author is following",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "authorId",
+             "description": "uuid of the author",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/bookmarks": {
+       "post": {
+         "tags": [
+           "Bookmark"
+         ],
+         "summary": "Bookmark an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "body",
+             "name": "body",
+             "description": "json object of article",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/bookmarkArticle"
+             }
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       },
+       "get": {
+         "tags": [
+           "Bookmark"
+         ],
+         "summary": "Get articles bookmarked by a user",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       },
+       "delete": {
+         "tags": [
+           "Bookmark"
+         ],
+         "summary": "Delete a bookmarked article by a user",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "body",
+             "name": "body",
+             "description": "json object of article",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/bookmarkArticle"
+             }
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/comments/{id}": {
+       "post": {
+         "tags": [
+           "Comments"
+         ],
+         "summary": "Comment on an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "id",
+             "description": "uuid of the article",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           },
+           {
+             "in": "body",
+             "name": "body",
+             "description": "json object of comment body",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/comment"
+             }
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "article does not exist"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       },
+       "get": {
+         "tags": [
+           "Comments"
+         ],
+         "summary": "Get the comments from an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "id",
+             "description": "uuid of the article",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       },
+       "patch": {
+         "tags": [
+           "Comments"
+         ],
+         "summary": "Update the comment an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "id",
+             "description": "uuid of the comment",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           },
+           {
+             "in": "body",
+             "name": "body",
+             "description": "json object of comment body",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/comment"
+             }
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       },
+       "delete": {
+         "tags": [
+           "Comments"
+         ],
+         "summary": "Delete a comment from an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "id",
+             "description": "uuid of the comment",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "comment does not exist"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/comments/report/{id}": {
+       "post": {
+         "tags": [
+           "Comments"
+         ],
+         "summary": "Report a comment on an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "id",
+             "description": "uuid of the comment",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           },
+           {
+             "in": "body",
+             "name": "reason",
+             "description": "json object of comment body",
+             "required": true,
+             "schema": {
+               "$ref": "#/definitions/reportComment"
+             }
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "article does not exist"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       },
+       "delete": {
+         "tags": [
+           "Comments"
+         ],
+         "summary": "Delete report on a comment",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "id",
+             "description": "uuid of the report",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           }
+         }
+       }
+     },
+     "/comments/report": {
+       "get": {
+         "tags": [
+           "Comments"
+         ],
+         "summary": "Get all reported comments",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           }
+         }
+       }
+     },
+     "/comments/reply/{commentId}": {
+       "post": {
+         "tags": [
+           "Comments"
+         ],
+         "summary": "Post reply to a comment",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "commentId",
+             "description": "uuid of the comment",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "comment not found"
+           }
+         }
+       },
+       "get": {
+         "tags": [
+           "Comments"
+         ],
+         "summary": "Get the replies of a comment",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "commentId",
+             "description": "uuid of the comment",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "comment not found"
+           }
+         }
+       }
+     },
+     "/comments/likes/{commentId}/{option}": {
+       "put": {
+         "tags": [
+           "Comments"
+         ],
+         "summary": "Like/Dislike an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "commentId",
+             "description": "uuid of the comment",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           },
+           {
+             "in": "path",
+             "name": "option",
+             "description": "option can either be like or dislike",
+             "required": true,
+             "type": "string"
+           }
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "201": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           },
+           "404": {
+             "description": "Comment does not exisxt"
+           },
+           "422": {
+             "description": "Unprocessable Entity"
+           }
+         }
+       }
+     },
+     "/reading-statistics/{timeline}": {
+       "get": {
+         "tags": [
+           "Reading Statistics"
+         ],
+         "summary": "Get the number of articles a user has read for a specified timeline",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "timeline",
+             "description": "number of days",
+             "required": true,
+             "type": "number"
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           }
+         }
+       }
+     },
+     "/notifications/comments": {
+       "get": {
+         "tags": [
+           "Notifications"
+         ],
+         "summary": "Get notifications of comments on an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           }
+         }
+       }
+     },
+     "/notifications/comments/clear": {
+       "patch": {
+         "tags": [
+           "Notifications"
+         ],
+         "summary": "Clear read notifications of all comments",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           }
+         }
+       }
+     },
+     "/notifications/comments/clear/{articleId}": {
+       "patch": {
+         "tags": [
+           "Notifications"
+         ],
+         "summary": "Clear read notifications of comments on an article",
+         "description": "",
+         "operationId": "",
+         "consumes": [
+           "application/json"
+         ],
+         "produces": [
+           "application/json"
+         ],
+         "security": [
+           {
+             "authorization": []
+           }
+         ],
+         "parameters": [
+           {
+             "in": "path",
+             "name": "articleId",
+             "description": "uuid of the article",
+             "required": true,
+             "type": "string",
+             "format": "uuid"
+           }
+         ],
+         "responses": {
+           "200": {
+             "description": "success",
+             "schema": {
+               "$ref": "#/definitions/success"
+             }
+           },
+           "401": {
+             "description": "unauthorized"
+           }
+         }
+       }
+     }
+   },
+   "definitions": {
+     "userSignup": {
+       "type": "object",
+       "required": [
+         "email",
+         "password"
+       ],
+       "properties": {
+         "email": {
+           "type": "string",
+           "example": "mail@email.com"
+         },
+         "password": {
+           "type": "string",
+           "example": "yourPassword"
+         }
+       }
+     },
+     "forgotPassword": {
+       "type": "object",
+       "required": [
+         "email"
+       ],
+       "properties": {
+         "email": {
+           "type": "string",
+           "example": "mail@email.com"
+         }
+       }
+     },
+     "resetPassword": {
+       "type": "object",
+       "required": [
+         "password",
+         "resetToken"
+       ],
+       "properties": {
+         "password": {
+           "type": "string",
+           "example": "password"
+         },
+         "resetToken": {
+           "type": "string",
+           "example": "A JWT token"
+         }
+       }
+     },
+     "updateUser": {
+       "type": "object",
+       "properties": {
+         "email": {
+           "type": "string",
+           "example": "mail@email.com"
+         },
+         "firstname": {
+           "type": "string",
+           "example": "Ivy"
+         },
+         "lastname": {
+           "type": "string",
+           "example": "Supreme"
+         },
+         "username": {
+           "type": "string",
+           "example": "isup"
+         },
+         "bio": {
+           "type": "string",
+           "example": "I am a ninja"
+         },
+         "image": {
+           "type": "string",
+           "example": ""
+         }
+       }
+     },
+     "role": {
+       "type": "object",
+       "required": [
+         "role"
+       ],
+       "properties": {
+         "role": {
+           "type": "string",
+           "example": "user, moderator or admin"
+         }
+       }
+     },
+     "articleRating": {
+       "type": "object",
+       "required": [
+         "articleId",
+         "rating"
+       ],
+       "properties": {
+         "articleId": {
+           "type": "string",
+           "format": "uuid",
+           "example": "1a400965-e1d6-4d38-aac1-02e7c863de70"
+         },
+         "rating": {
+           "type": "number",
+           "example": "5"
+         }
+       }
+     },
+     "bookmarkArticle": {
+       "type": "object",
+       "required": [
+         "article"
+       ],
+       "properties": {
+         "article": {
+           "type": "string",
+           "format": "uuid",
+           "example": "1a400965-e1d6-4d38-aac1-02e7c863de70"
+         }
+       }
+     },
+     "comment": {
+       "type": "object",
+       "required": [
+         "body"
+       ],
+       "properties": {
+         "body": {
+           "type": "string",
+           "example": "This is the first comment on an article"
+         }
+       }
+     },
+     "reportComment": {
+       "type": "object",
+       "required": [
+         "reason"
+       ],
+       "properties": {
+         "reason": {
+           "type": "string",
+           "example": "This is comment is anti-semitic"
+         }
+       }
+     },
+     "articleReporting": {
+       "type": "object",
+       "required": [
+         "articleId",
+         "reason"
+       ],
+       "properties": {
+         "article": {
+           "type": "string",
+           "format": "uuid",
+           "example": "1a400965-e1d6-4d38-aac1-02e7c863de70"
+         },
+         "reason": {
+           "type": "string",
+           "example": "This article promotes terrorism"
+         }
+       }
+     },
+     "article": {
+       "type": "object",
+       "required": [
+         "title",
+         "description",
+         "body"
+       ],
+       "properties": {
+         "title": {
+           "type": "string",
+           "example": "This is the title of the article"
+         },
+         "description": {
+           "type": "string",
+           "example": "This is the description of the article"
+         },
+         "body": {
+           "type": "string",
+           "example": "This is the body of the article"
+         },
+         "plainText": {
+           "type": "string",
+           "example": "This is the plain text of the article"
+         },
+         "tagList": {
+           "type": "array",
+           "items": {
+             "type": "string"
+           },
+           "example": [
+             "anime",
+             "music"
+           ]
+         }
+       }
+     },
+     "success": {
+       "type": "object",
+       "properties": {
+         "status": {
+           "type": "integer",
+           "example": 200
+         },
+         "message": {
+           "type": "string",
+           "example": "successful"
+         }
+       }
+     }
+   }
  }
- 
