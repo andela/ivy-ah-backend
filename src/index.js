@@ -3,16 +3,22 @@ import passport from 'passport';
 import session from 'express-session';
 import cors from 'cors';
 import express from 'express';
+import http from 'http';
 import { config } from 'dotenv';
 import morgan from 'morgan';
 import multer from 'multer';
 import router from './routes/api/index';
 import './config/socialAuth';
+import { io, ioOptions } from './socket/socket';
 
 config();
 
 // Create global app object
 const app = express();
+
+const server = new http.createServer(app);
+
+io.attach(server, ioOptions);
 
 app.use(cors());
 
@@ -50,6 +56,6 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(process.env.PORT || 3000);
+server.listen(process.env.PORT || 3000);
 
-export default app;
+export default server;

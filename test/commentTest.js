@@ -107,15 +107,15 @@ describe('Test for user should be able to make comments', () => {
       .send({
         body: 'this is a test comment this is a test comment',
       });
-    expect(result.status).to.be.equal(500);
-    expect(result.body.error).to.deep.equal('Internal Server Error');
+    expect(result.status).to.be.equal(404);
+    expect(result.body.error).to.deep.equal('article does not exist');
   });
 
   it('should not get comment on unknown resource', async () => {
     const result = await supertest(app)
       .get('/api/v1/comments/reply/43c754bf-d6cc-6804-a4fe-9d9413c8e033');
-    expect(result.status).to.be.equal(404);
-    expect(result.body.error).to.deep.equal('there are no comments for the resource requested');
+    expect(result.status).to.be.equal(200);
+    expect(result.body.comments).to.deep.equal([]);
   });
 
   it('it should like a comment', async () => {

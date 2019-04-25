@@ -56,7 +56,7 @@ class ReportComments {
         type: sequelize.QueryTypes.SELECT
       });
 
-      comments = comments.reduce((commentArray, current, i, array) => {
+      comments = comments.reduce((commentArray, current, Si, array) => {
         if (current.id) {
           let reportReason;
           let user;

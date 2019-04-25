@@ -8,6 +8,7 @@ import bookmarkRoute from './bookmarks/bookmarkRoute';
 import adminRoute from './admin/adminRoute';
 import commentRoute from './comments/commentRoute';
 import readingStatsRoute from './readingStats/readingStatsRoute';
+import notificationsRoute from './notifications/notificationsRoute';
 
 const router = express.Router();
 
@@ -18,6 +19,7 @@ router.use('/articles', articleRoute);
 router.use('/admin', adminRoute);
 router.use('/comments', commentRoute);
 router.use('/reading-statistics', readingStatsRoute);
+router.use('/notifications', notificationsRoute);
 router.use('/bookmarks', bookmarkRoute);
 
 module.exports = router;
