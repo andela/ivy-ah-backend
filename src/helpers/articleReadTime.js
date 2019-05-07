@@ -5,7 +5,7 @@
  * @returns {number} readtime
  */
 const calculateReadTime = (article) => {
-  const averageWordsPerMinute = 280;
+  const averageWordsPerMinute = 200;
 
   const numberOfWords = article.match(/\b[-'?(\w+)]+/gi).length;
 

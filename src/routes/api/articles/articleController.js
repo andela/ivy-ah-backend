@@ -115,6 +115,10 @@ export default class Article {
       const limit = request.query.limit ? request.query.limit : null;
       const offset = request.query.page ? limit * (request.query.page - 1) : null;
       const { count, rows } = await articles.findAndCountAll({
+        include: [{
+          model: users,
+          attributes: ['firstname', 'lastname', 'image']
+        }],
         offset,
         limit
       });
@@ -177,7 +181,7 @@ export default class Article {
       const include = [
         {
           model: users,
-          attributes: ['username', 'bio', 'image']
+          attributes: ['username', 'bio', 'image', 'lastname', 'firstname']
         },
         {
           model: comment,
