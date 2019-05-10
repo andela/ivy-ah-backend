@@ -22,6 +22,10 @@ const sendCommentNotification = async (comment) => {
   }
 };
 
+const sendArticleNotification = async (article) => {
+  io.emit('new article', article);
+};
+
 /**
  * sends real time notification to article author
  * @param {object} like like object
@@ -92,5 +96,6 @@ export {
   sendCommentNotification,
   sendLikeNotification,
   sendFollowingNotification,
-  sendCommentLikeNotification
+  sendCommentLikeNotification,
+  sendArticleNotification
 };
