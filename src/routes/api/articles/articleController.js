@@ -5,6 +5,8 @@ import removeDuplicate from '../../../helpers/arrayDuplicateRemover';
 import authenticator from '../../../helpers/authenticator';
 import addToReadArticles from '../../../helpers/readingStats';
 import articleNotifications from '../../../helpers/articleNotification';
+import circularReplacer from '../../../helpers/circularReplacer';
+
 
 const {
   articles, likes, users, ratings, comment, commentlikes, sequelize
@@ -118,17 +120,26 @@ export default class Article {
         include: [{
           model: users,
           attributes: ['firstname', 'lastname', 'image']
-        }],
+        },
+        { model: ratings }
+        ],
         offset,
-        limit
+        limit,
       });
+      const removeCyclicStructure = JSON.stringify(rows, circularReplacer());
+      const newRows = JSON.parse(removeCyclicStructure);
       const numberOfPages = limit ? (Math.ceil(count / limit)) : 1;
+      const newArticleRows = newRows.map(article => ({
+        ...article,
+        ratings: article.ratings.reduce((ratingSum,
+          currentRating) => ratingSum + currentRating.rating, 0)
+      }));
       return response.status(200).json({
         status: 200,
         numberOfArticles: count,
         numberOfPages,
         currentPage: request.query.page,
-        articles: rows,
+        articles: newArticleRows
       });
     } catch (err) {
       return next(err);
