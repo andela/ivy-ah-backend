@@ -40,14 +40,14 @@ class PasswordReset {
    */
   static async sendPasswordResetToken(req, res) {
     try {
-      const { email } = req.body;
+      const { email, url } = req.body;
       const { payload, firstname } = await getPayload(email);
       const secret = payload;
       const passwordResetToken = await authenticator.generateToken({
         email
       }, secret);
-      const url = `${req.protocol}://${req.get('host')}/api/v1/resetpassword`;
-      const fullUrl = `${url}/${passwordResetToken}`;
+      // const url = `${req.protocol}://${req.get('host')}/api/v1/resetpassword`;
+      const fullUrl = `${url}/?resetToken=${passwordResetToken}`;
       emailSender(email, 'Reset Your password', Templates.forgotPassword(fullUrl, firstname));
       return res.status(200).json({
         status: 200,
@@ -71,7 +71,8 @@ class PasswordReset {
    */
   static async resetPassword(req, res) {
     try {
-      const { password, resetToken } = req.body;
+      const { password } = req.body;
+      const { resetToken } = req.query;
       const userData = jwt.decode(resetToken);
       if (!userData) return res.status(422).json({ status: 422, error: { resetToken: 'invalid jwt' } });
       const { email } = userData;

@@ -45,7 +45,7 @@ class User {
         email: user.email, id: user.id, role: user.role
       });
 
-      const confirmEmailPage = `${request.protocol}://${request.get('host')}/confirmation/${token}`;
+      const confirmEmailPage = `https://ivy-ah-frontend.herokuapp.com/api/v1/confirmation/${token}`;
 
       await emailSender(email, 'Please Confirm Your Email', Templates.confirmEmail(confirmEmailPage, email));
       return response.status(201).json({

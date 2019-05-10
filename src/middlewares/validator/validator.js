@@ -15,10 +15,6 @@ const password = joi.string().trim().regex(/^[\w\W]{8,32}$/)
   .error(() => 'password must contain between 8 and 32 characters')
   .required();
 
-const resetToken = joi.string().trim().regex(/^[\w\W]+\.[\w\W]+\.[\w\W]+$/)
-  .error(() => 'The password reset link has expired, kindly request for a new reset link')
-  .required();
-
 const highlightedText = joi.string().error(() => 'invalid highlighted text');
 const textPosition = joi.number().integer().error(() => 'position must be an integer');
 const role = joi.string().trim().required().error(() => 'Role is required');
@@ -86,7 +82,7 @@ const schemas = {
   }),
   forgotPassword: joi.object().keys({ email }),
   resendMail: joi.object().keys({ email }),
-  resetPassword: joi.object().keys({ password, resetToken }),
+  resetPassword: joi.object().keys({ password }),
   articleSearch: joi.object().keys({ keyword, tags, author }).or(['keyword', 'tags', 'author']).error(() => 'a valid search parameter must be provided'),
   articleRating: joi.object().keys({ articleId, rating }),
   getArticleRating: joi.object().keys({ articleId }),
