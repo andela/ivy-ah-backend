@@ -50,9 +50,8 @@ describe('Test for password reset functionality', () => {
   });
 
   it('should successfully reset a user password', (done) => {
-    api.patch('/api/v1/users/resetpassword').send({
-      password: '11111111',
-      resetToken
+    api.patch(`/api/v1/users/resetpassword?resetToken=${resetToken}`).send({
+      password: '11111111'
     })
       .end((err, res) => {
         expect(res.status).to.eql(200);
@@ -62,9 +61,8 @@ describe('Test for password reset functionality', () => {
   });
 
   it('should return an error if the reset link is used twice', (done) => {
-    api.patch('/api/v1/users/resetpassword').send({
-      password: '11111111',
-      resetToken
+    api.patch(`/api/v1/users/resetpassword?resetToken=${resetToken}`).send({
+      password: '11111111'
     })
       .end((err, res) => {
         expect(res.status).to.eql(401);
@@ -74,9 +72,8 @@ describe('Test for password reset functionality', () => {
   });
 
   it('should return an error if the token is not the right format', (done) => {
-    api.patch('/api/v1/users/resetpassword').send({
+    api.patch('/api/v1/users/resetpassword?resetToken=hsjsskskksksks').send({
       password: '11111111',
-      resetToken: 'hsjsskskksksks'
     })
       .end((err, res) => {
         expect(res.status).to.eql(422);
