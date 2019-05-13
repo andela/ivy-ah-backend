@@ -5,6 +5,7 @@ import removeDuplicate from '../../../helpers/arrayDuplicateRemover';
 import authenticator from '../../../helpers/authenticator';
 import addToReadArticles from '../../../helpers/readingStats';
 import articleNotifications from '../../../helpers/articleNotification';
+import { sendArticleNotification } from '../../../socket/sendNotification';
 import circularReplacer from '../../../helpers/circularReplacer';
 
 
@@ -50,7 +51,8 @@ export default class Article {
           status: 201,
           article: dataValues,
         });
-        await articleNotifications(dataValues, dataValues.author);
+        sendArticleNotification(dataValues);
+        articleNotifications(dataValues, dataValues.author);
         return;
       }
     } catch (err) {
