@@ -47,7 +47,7 @@ class PasswordReset {
         email
       }, secret);
       // const url = `${req.protocol}://${req.get('host')}/api/v1/resetpassword`;
-      const fullUrl = `${url}/?resetToken=${passwordResetToken}`;
+      const fullUrl = `${url}?resetToken=${passwordResetToken}`;
       emailSender(email, 'Reset Your password', Templates.forgotPassword(fullUrl, firstname));
       return res.status(200).json({
         status: 200,

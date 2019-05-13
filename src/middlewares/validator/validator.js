@@ -1,21 +1,14 @@
 import joi from 'joi';
 
 const username = joi.string().alphanum().min(3).max(10)
-  .trim()
   .error(() => 'username must contain between 3 and 10 alphanumeric characters');
 const firstname = joi.string().alphanum().min(3).max(225)
-  .trim()
   .error(() => 'firstname must contain between 3 and 225 alphanumeric characters');
 const lastname = joi.string().alphanum().min(3).max(225)
-  .trim()
   .error(() => 'lastname must contain between 3 and 225 alphanumeric characters');
 
-const email = joi.string().email().trim()
+const email = joi.string().email()
   .error(() => 'email must be in the format john@example.com')
-  .required();
-
-const url = joi.string()
-  .error(() => 'Valid url is required')
   .required();
 
 const password = joi.string().trim().regex(/^[\w\W]{8,32}$/)
@@ -30,8 +23,6 @@ const description = joi.string();
 const body = joi.string();
 const tagList = joi.array();
 const plainText = joi.string();
-const bannerImage = joi.string();
-const isPremium = joi.boolean();
 
 const articleId = joi.string().guid().required()
   .error(() => 'We do not know the article you are referring to. Please provide a valid article id');
@@ -60,14 +51,9 @@ const updateSchema = joi.object().keys({
   username,
   firstname,
   lastname,
-  bio: joi.string().min(5).max(100),
-  image: joi.string(),
-  notification: joi.boolean(),
-  isSubscribed: joi.boolean(),
-  isVerified: joi.boolean(),
   email: joi.string().email()
     .error(() => 'email must be in the format john@example.com')
-}).or('username', 'email', 'firstname', 'lastname', 'bio', 'image', 'notification', 'isSubscribed', 'isVerified');
+}).or('username', 'email', 'firstname', 'lastname');
 
 const reason = joi.string()
   .error(() => 'reason must be a string').required();
@@ -85,20 +71,16 @@ const schemas = {
     description,
     body,
     tagList,
-    plainText,
-    bannerImage,
-    isPremium
+    plainText
   }).and('body', 'plainText').error(() => 'body and plainText field must be present'),
   articles: joi.object().keys({
     title: title.required(),
-    bannerImage,
-    isPremium,
     description: description.required(),
     body: body.required(),
     tagList: tagList.required(),
     plainText: title.required()
   }),
-  forgotPassword: joi.object().keys({ email, url }),
+  forgotPassword: joi.object().keys({ email }),
   resendMail: joi.object().keys({ email }),
   resetPassword: joi.object().keys({ password }),
   articleSearch: joi.object().keys({ keyword, tags, author }).or(['keyword', 'tags', 'author']).error(() => 'a valid search parameter must be provided'),

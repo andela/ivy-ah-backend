@@ -15,7 +15,7 @@ class Profiles {
       const { id } = request.params;
       const profile = await db.users.findOne({
         attributes: { exclude: ['password'] },
-        where: { id }
+        where: { id },
       });
       if (profile) {
         response.status(200).json({
