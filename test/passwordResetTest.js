@@ -28,8 +28,7 @@ describe('Test for password reset functionality', () => {
 
   it('should send an email with password reset link', (done) => {
     api.post('/api/v1/users/forgotpassword').send({
-      email: 'test@test.com',
-      url: 'http://localhost:2019/resetPassword'
+      email: 'test@test.com'
     })
       .end((err, res) => {
         resetToken = res.body.passwordResetToken;
@@ -41,8 +40,7 @@ describe('Test for password reset functionality', () => {
 
   it('should return an error if email is not in the database', (done) => {
     api.post('/api/v1/users/forgotpassword').send({
-      email: 'tester@test.com',
-      url: 'http://localhost:2019/resetPassword'
+      email: 'tester@test.com'
     })
       .end((err, res) => {
         expect(res.status).to.eql(404);
