@@ -2,8 +2,9 @@ import authenticator from '../../../helpers/authenticator';
 import db from '../../../models/index';
 import emailSender from '../../../helpers/emailSender';
 import Templates from '../../../helpers/Templates';
+import circularReplacer from '../../../helpers/circularReplacer';
 
-const { articles } = db;
+const { articles, users, ratings } = db;
 /**
  * @class Users
  */
@@ -21,21 +22,19 @@ class Users {
       const limit = req.query.limit ? req.query.limit : 30;
       const offset = req.query.page ? limit * (req.query.page - 1) : 0;
       const currentPage = req.query.page ? req.query.page : 1;
-      const { count, rows } = await db.users
-        .findAndCountAll({
-          offset,
-          limit,
-          attributes: { exclude: ['password'] }
-        });
-      const numberOfPages = limit ? (Math.ceil(count / limit)) : 1;
-      return res.status(200)
-        .json({
-          status: 200,
-          numberOfPages,
-          numberOfUsers: count,
-          currentPage,
-          users: rows
-        });
+      const { count, rows } = await db.users.findAndCountAll({
+        offset,
+        limit,
+        attributes: { exclude: ['password'] }
+      });
+      const numberOfPages = limit ? Math.ceil(count / limit) : 1;
+      return res.status(200).json({
+        status: 200,
+        numberOfPages,
+        numberOfUsers: count,
+        currentPage,
+        users: rows
+      });
     } catch (err) {
       return next(err);
     }
@@ -52,10 +51,22 @@ class Users {
   static async updateUser(req, res, next) {
     try {
       const { id } = req.user;
-      const [, data] = await db.users.update(req.body, { where: { id }, returning: true });
+      const [, data] = await db.users.update(req.body, {
+        where: { id },
+        returning: true
+      });
       const {
-        isVerified, isSubscribed, role, email, bio, image, createdAt, updatedAt,
-        username, firstname, lastname
+        isVerified,
+        isSubscribed,
+        role,
+        email,
+        bio,
+        image,
+        createdAt,
+        updatedAt,
+        username,
+        firstname,
+        lastname
       } = data[0].dataValues;
       return res.status(200).json({
         status: 200,
@@ -79,52 +90,64 @@ class Users {
   }
 
   /**
- *
- * this function gets all articles created by a specific
- * user
- * @static
- * @param {Request} req request object
- * @param {Response} res response object
- * @param {Next} next called if there is an error
- * @memberof Users
- * @return { void }
- */
+   *
+   * this function gets all articles created by a specific
+   * user
+   * @static
+   * @param {Request} req request object
+   * @param {Response} res response object
+   * @param {Next} next called if there is an error
+   * @memberof Users
+   * @return { void }
+   */
   static async getUserArticles(req, res, next) {
     try {
       const limit = req.query.limit ? req.query.limit : 30;
       const offset = req.query.page ? limit * (req.query.page - 1) : 0;
       const currentPage = req.query.page ? req.query.page : 1;
-      const { count, rows } = await articles
-        .findAndCountAll({
-          offset,
-          limit,
-          where: { author: req.user.id },
-          attributes: { exclude: ['author'] },
-        });
-      const pageCount = limit ? (Math.ceil(count / limit)) : 1;
-      return res.status(200)
-        .json({
-          status: 200,
-          pageCount,
-          articleCount: count,
-          currentPage,
-          articles: rows
-        });
+      const { count, rows } = await articles.findAndCountAll({
+        offset,
+        limit,
+        where: { author: req.user.id },
+        include: [
+          {
+            model: users,
+            attributes: { exclude: ['password'] }
+          },
+          { model: ratings }
+        ]
+      });
+      const removeCyclicStructure = JSON.stringify(rows, circularReplacer());
+      const newRows = JSON.parse(removeCyclicStructure);
+      const pageCount = limit ? Math.ceil(count / limit) : 1;
+      const newArticleRows = newRows.map(article => ({
+        ...article,
+        ratings:
+        article.ratings.reduce((ratingSum, currentRating) => ratingSum + currentRating.rating,
+          0)
+      }));
+      return res.status(200).json({
+        status: 200,
+        pageCount,
+        articleCount: count,
+        currentPage,
+        articles: newArticleRows
+      });
     } catch (error) {
       return next(error);
     }
   }
 
   /**
-  * this method verifies user email
-  *
-  * @static
-  * @param {obj} request
-  * @param {obj} response
-  * @param {function} next
-  * @returns {void}
-  * @memberof Users
-  */
+   * this method verifies user email
+   *
+   * @static
+   * @param {obj} request
+   * @param {obj} response
+   * @param {function} next
+   * @returns {void}
+   * @memberof Users
+   */
   static async confirmEmail(request, response, next) {
     try {
       const { token } = request.params;
@@ -136,18 +159,29 @@ class Users {
           error: 'Email Already Verified'
         });
       }
-      const [, updatedUser] = await db.users.update({ isVerified: true }, {
-        where: { email },
-        returning: true,
-      });
+      const [, updatedUser] = await db.users.update({ isVerified: true },
+        {
+          where: { email },
+          returning: true
+        });
       const {
-        username, firstname, lastname, isVerified,
-        isSubscribed, role, bio, image, createdAt, updatedAt
+        username,
+        firstname,
+        lastname,
+        isVerified,
+        isSubscribed,
+        role,
+        bio,
+        image,
+        createdAt,
+        updatedAt
       } = updatedUser[0].dataValues;
 
       const loginPage = `${request.protocol}://${request.get('host')}/login`;
 
-      emailSender(email, 'Email confirmation successful', Templates.emailConfirmed(loginPage, email));
+      emailSender(email,
+        'Email confirmation successful',
+        Templates.emailConfirmed(loginPage, email));
       return response.status(200).json({
         status: 200,
         message: 'Email Confirmation Successful',
@@ -194,7 +228,9 @@ class Users {
 
       const confirmEmailPage = `${request.protocol}://${request.get('host')}/confirmation/${token}`;
 
-      await emailSender(email, 'Please Confirm Your Email', Templates.confirmEmail(confirmEmailPage, email));
+      await emailSender(email,
+        'Please Confirm Your Email',
+        Templates.confirmEmail(confirmEmailPage, email));
       return response.status(200).json({
         status: 200,
         message: 'Verification mail has been sent to user'
