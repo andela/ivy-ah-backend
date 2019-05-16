@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 import db from '../../../models/index';
 import authenticator from '../../../helpers/authenticator';
 import PasswordHasher from '../../../helpers/PasswordHasher';
@@ -46,7 +47,6 @@ class PasswordReset {
       const passwordResetToken = await authenticator.generateToken({
         email
       }, secret);
-      // const url = `${req.protocol}://${req.get('host')}/api/v1/resetpassword`;
       const fullUrl = `${url}?resetToken=${passwordResetToken}`;
       emailSender(email, 'Reset Your password', Templates.forgotPassword(fullUrl, firstname));
       return res.status(200).json({
@@ -78,7 +78,7 @@ class PasswordReset {
       const { email } = userData;
       const { payload, firstname } = await getPayload(email);
       const secret = payload;
-      const url = `${req.protocol}://${req.get('host')}/api/v1/users/login`;
+      const url = process.env.FRONTEND_URL;
       const isVerified = await authenticator.verifyToken(resetToken, secret);
       if (isVerified) {
         const hashedPassword = await PasswordHasher.hashPassword(password);

@@ -149,7 +149,7 @@ class Following {
           {
             model: db.users,
             as: 'author',
-            attributes: ['username', 'firstname', 'lastname', 'bio', 'image'],
+            attributes: ['username', 'firstname', 'lastname', 'bio', 'image', 'id'],
           },
         ],
       });

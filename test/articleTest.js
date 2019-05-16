@@ -132,8 +132,8 @@ describe('Article rating', () => {
         articleId: `${articleId}`,
         rating: 4
       })
-      .expect(201);
-    expect(result.status).to.equal(201);
+      .expect(200);
+    expect(result.status).to.equal(200);
     expect(result.body).to.be.an('object');
     expect(result.body).to.have.property('data');
     expect(result.body.data).to.have.property('rating');

@@ -11,6 +11,10 @@ const email = joi.string().email()
   .error(() => 'email must be in the format john@example.com')
   .required();
 
+const url = joi.string()
+  .error(() => 'url is required')
+  .required();
+
 const password = joi.string().trim().regex(/^[\w\W]{8,32}$/)
   .error(() => 'password must contain between 8 and 32 characters')
   .required();
@@ -80,7 +84,7 @@ const schemas = {
     tagList: tagList.required(),
     plainText: title.required()
   }),
-  forgotPassword: joi.object().keys({ email }),
+  forgotPassword: joi.object().keys({ email, url }),
   resendMail: joi.object().keys({ email }),
   resetPassword: joi.object().keys({ password }),
   articleSearch: joi.object().keys({ keyword, tags, author }).or(['keyword', 'tags', 'author']).error(() => 'a valid search parameter must be provided'),

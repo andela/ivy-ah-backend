@@ -51,6 +51,7 @@ class Admin {
         where: { id },
         returning: true,
       });
+      // eslint-disable-next-line no-unused-vars
       const { password, ...user } = updatedUser[0].dataValues;
       return response.status(200).json({
         status: 200,

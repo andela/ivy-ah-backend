@@ -1,4 +1,5 @@
 /* eslint-disable no-prototype-builtins */
+import 'dotenv/config';
 import db from '../../../models/index';
 import authenticator from '../../../helpers/authenticator';
 import PasswordHasher from '../../../helpers/PasswordHasher';
@@ -45,7 +46,7 @@ class User {
         email: user.email, id: user.id, role: user.role
       });
 
-      const confirmEmailPage = `https://ivy-ah-frontend.herokuapp.com/api/v1/confirmation/${token}`;
+      const confirmEmailPage = `${process.env.FRONTEND_URL}confirmation?token=${token}`;
 
       await emailSender(email, 'Please Confirm Your Email', Templates.confirmEmail(confirmEmailPage, email));
       return response.status(201).json({
@@ -113,6 +114,7 @@ class User {
           token,
           username: user.username,
           bio: user.bio,
+          isVerified: user.isVerified,
           image: user.image
         },
       });

@@ -192,7 +192,7 @@ export default class Article {
       const include = [
         {
           model: users,
-          attributes: ['username', 'bio', 'image', 'lastname', 'firstname']
+          attributes: ['username', 'bio', 'image', 'lastname', 'firstname', 'id']
         },
         {
           model: comment,
@@ -204,7 +204,7 @@ export default class Article {
             {
               model: comment,
               as: 'childComment',
-              include: [{ model: commentlikes }, { model: users, as: 'user', attributes: ['username', 'bio', 'image'] }]
+              attributes: ['id'],
             }
           ]
         },

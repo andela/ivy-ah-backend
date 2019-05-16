@@ -16,11 +16,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
+      unique: 'user_article_unique'
     },
     articleId: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
+      unique: 'user_article_unique'
     },
 
   }, {});

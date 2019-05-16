@@ -70,8 +70,8 @@ describe('READING STATISTICS', () => {
         articleId: `${myArticle}`,
         rating: 5
       })
-      .expect(201);
-    expect(result.status).to.equal(201);
+      .expect(200);
+    expect(result.status).to.equal(200);
   });
 
   it('it should like an article', async () => {
