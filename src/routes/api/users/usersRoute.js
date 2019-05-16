@@ -21,7 +21,7 @@ usersRoute.post('/forgotpassword', validate.forgotPassword, sendPasswordResetTok
 usersRoute.patch('/resetpassword', validate.resetPassword, resetPassword);
 usersRoute.get('/', checkToken, authorizeAdmin, Users.getAllUsers);
 usersRoute.patch('/', validate.validateUpdateUser, checkToken, Users.updateUser);
-usersRoute.get('/articles', checkToken, getUserArticles);
+usersRoute.get('/articles/:userId', checkToken, getUserArticles);
 usersRoute.get('/home', (req, res) => {
   res.send('every damn thing is working fine');
 });
