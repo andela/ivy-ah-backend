@@ -105,10 +105,11 @@ class Users {
       const limit = req.query.limit ? req.query.limit : 30;
       const offset = req.query.page ? limit * (req.query.page - 1) : 0;
       const currentPage = req.query.page ? req.query.page : 1;
+      const { userId } = req.params;
       const { count, rows } = await articles.findAndCountAll({
         offset,
         limit,
-        where: { author: req.user.id },
+        where: { author: userId },
         include: [
           {
             model: users,

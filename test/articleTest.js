@@ -13,6 +13,7 @@ const user = {
 
 let testToken;
 let articleId;
+let userId;
 
 before(async () => {
   await models.sequelize.sync({ force: true });
@@ -21,6 +22,7 @@ before(async () => {
     .send(user);
   expect(result.body.user).to.be.an('object');
   testToken = result.body.user.token;
+  userId = result.body.user.userid;
 });
 
 describe('Article', () => {
@@ -461,7 +463,7 @@ describe('article reporting', () => {
 
   it('it should return the articles created by a specific user', async () => {
     const result = await server
-      .get('/api/v1/users/articles')
+      .get(`/api/v1/users/articles/${userId}`)
       .set('authorization', testToken)
       .expect(200);
     expect(result.status).to.equal(200);
