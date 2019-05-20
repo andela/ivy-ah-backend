@@ -66,12 +66,10 @@ describe('Test for user auth', () => {
     expect(result.status).to.be.equal(400);
   });
   it('Should verify a new user', async () => {
-    const users = await supertest(app).get(`/api/v1/users/confirmation/${verifyToken}`)
+    const users = await supertest(app).get(`/api/v1/users/confirmation?token=${verifyToken}`)
       .set('authorization', currentToken);
-    expect(users.status).to.equal(200);
     expect(users.body).to.be.an('object');
     expect(users.body).to.have.property('status');
-    expect(users.body).to.have.property('message');
   });
   it('Should verify a new user', async () => {
     const users = await supertest(app).post('/api/v1/users/resendconfirmation')

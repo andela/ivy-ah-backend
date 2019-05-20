@@ -28,10 +28,12 @@ describe('Test for password reset functionality', () => {
 
   it('should send an email with password reset link', (done) => {
     api.post('/api/v1/users/forgotpassword').send({
-      email: 'test@test.com'
+      email: 'test@test.com',
+      url: 'http://localhost:3000/api/v1'
     })
       .end((err, res) => {
         resetToken = res.body.passwordResetToken;
+        expect(res).to.have.property('status');
         expect(res.status).to.eql(200);
         expect(res.body.message).to.eql('A password reset link has been sent to your email');
         done();
@@ -40,9 +42,11 @@ describe('Test for password reset functionality', () => {
 
   it('should return an error if email is not in the database', (done) => {
     api.post('/api/v1/users/forgotpassword').send({
-      email: 'tester@test.com'
+      email: 'tester@test.com',
+      url: 'http://localhost:3000/api/v1'
     })
       .end((err, res) => {
+        expect(res).to.have.property('status');
         expect(res.status).to.eql(404);
         expect(res.body.error).to.eql('user does not exists');
         done();
@@ -54,6 +58,7 @@ describe('Test for password reset functionality', () => {
       password: '11111111'
     })
       .end((err, res) => {
+        expect(res).to.have.property('status');
         expect(res.status).to.eql(200);
         expect(res.body.message).to.eql('Your password was successfully changed');
         done();
@@ -65,6 +70,7 @@ describe('Test for password reset functionality', () => {
       password: '11111111'
     })
       .end((err, res) => {
+        expect(res).to.have.property('status');
         expect(res.status).to.eql(401);
         expect(res.body.error).to.eql('The password reset link has expired, kindly request for a new reset link');
         done();
@@ -77,7 +83,9 @@ describe('Test for password reset functionality', () => {
     })
       .end((err, res) => {
         expect(res.status).to.eql(422);
-        done();
+        expect(res).to.have.property('status')
+          .to.be.equals(422);
       });
+    done();
   });
 });

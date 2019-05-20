@@ -1,6 +1,6 @@
 import db from '../../../models';
 
-const { bookmark } = db;
+const { bookmark, articles } = db;
 /**
  *contains static methods for adding, removing
  *and getting bookmarks
@@ -95,6 +95,10 @@ class Bookmark {
     try {
       const { count, rows } = await bookmark.findAndCountAll({
         attributes: ['article'],
+        include: {
+          model: articles,
+          as: 'articleDetail'
+        },
         where: { user }
       });
       return res.status(200).json({

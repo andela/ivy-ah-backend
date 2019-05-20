@@ -21,28 +21,16 @@ export default class Rating {
   static async rateArticleHandler(request, response, next) {
     try {
       const { articleId, rating } = request.body;
-      const [ratedArticle, isCreated] = await ratings.findOrCreate({
-        where: { articleId, userId: request.user.id },
-        defaults: { rating },
-        attributes: { exclude: ['id', 'createdAt'] }
+      const result = await ratings.upsert({
+        articleId,
+        userId: request.user.id,
+        rating
+      }, {
+        returning: true
       });
-      if (isCreated) {
-        return response.status(201).json({
-          status: 201,
-          data: ratedArticle.dataValues
-        });
-      }
-      if (Number(rating) !== ratedArticle.dataValues.rating) {
-        const [, [updatedRating]] = await ratings.update({ rating },
-          { returning: true, where: { articleId }, attributes: ['articleId', 'rating'] });
-        return response.status(200).json({
-          status: 200,
-          data: updatedRating,
-        });
-      }
       return response.status(200).json({
         status: 200,
-        data: ratedArticle.dataValues
+        data: result[0]
       });
     } catch (err) {
       if (err.parent.code === '23503') {

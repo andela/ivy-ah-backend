@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import authenticator from '../../../helpers/authenticator';
 import db from '../../../models/index';
 import emailSender from '../../../helpers/emailSender';
@@ -178,7 +179,7 @@ class Users {
         updatedAt
       } = updatedUser[0].dataValues;
 
-      const loginPage = `${request.protocol}://${request.get('host')}/login`;
+      const loginPage = process.env.FRONTEND_URL;
 
       emailSender(email,
         'Email confirmation successful',
@@ -227,7 +228,7 @@ class Users {
       }
       const token = await authenticator.generateToken({ email });
 
-      const confirmEmailPage = `${request.protocol}://${request.get('host')}/confirmation/${token}`;
+      const confirmEmailPage = `${process.env.FRONTEND_URL}/confirmation?token=${token}`;
 
       await emailSender(email,
         'Please Confirm Your Email',

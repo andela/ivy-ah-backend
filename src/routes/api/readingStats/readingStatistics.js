@@ -1,7 +1,7 @@
 import moment from 'moment';
 import db from '../../../models';
 
-const { ReadArticles, Sequelize } = db;
+const { ReadArticles, articles, Sequelize } = db;
 
 const { Op } = Sequelize;
 
@@ -31,7 +31,13 @@ export default class ReadingStats {
           createdAt: {
             [Op.gte]: moment().subtract(timeline, 'days').toDate()
           }
-        }
+        },
+        include: [
+          {
+            model: articles,
+            as: 'article'
+          }
+        ]
       });
       const { rows, count } = result;
       res.status(200).json({
