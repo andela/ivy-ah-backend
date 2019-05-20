@@ -27,6 +27,7 @@ const description = joi.string();
 const body = joi.string();
 const tagList = joi.array();
 const plainText = joi.string();
+const bannerImage = joi.string();
 
 const articleId = joi.string().guid().required()
   .error(() => 'We do not know the article you are referring to. Please provide a valid article id');
@@ -72,6 +73,7 @@ const schemas = {
   }),
   updateArticles: joi.object().keys({
     title,
+    bannerImage,
     description,
     body,
     tagList,
@@ -82,7 +84,8 @@ const schemas = {
     description: description.required(),
     body: body.required(),
     tagList: tagList.required(),
-    plainText: title.required()
+    plainText: title.required(),
+    bannerImage
   }),
   forgotPassword: joi.object().keys({ email, url }),
   resendMail: joi.object().keys({ email }),
