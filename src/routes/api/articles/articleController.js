@@ -248,6 +248,7 @@ export default class Article {
       const articleDetails = {
         id: article.id,
         slug: article.slug,
+        bannerImage: article.bannerImage,
         title: article.title,
         body: article.body,
         plainText: article.plainText,
