@@ -37,7 +37,8 @@ export default class ReadingStats {
             model: articles,
             as: 'article'
           }
-        ]
+        ],
+        order: [['createdAt', 'DESC']]
       });
       const { rows, count } = result;
       res.status(200).json({

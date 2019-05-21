@@ -115,6 +115,7 @@ class Following {
             attributes: ['id', 'username', 'firstname', 'lastname', 'bio', 'image'],
           },
         ],
+        order: [['createdAt', 'DESC']]
       });
       followers = followers.map(follower => follower.follower);
       return res.status(200).json({
@@ -152,6 +153,7 @@ class Following {
             attributes: ['username', 'firstname', 'lastname', 'bio', 'image', 'id'],
           },
         ],
+        order: [['createdAt', 'DESC']]
       });
       followings = followings.map(following => following.author);
       return res.status(200).json({

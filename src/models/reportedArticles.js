@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       unique: 'compositeIndex'
     }
-  }, { timestamps: false, primaryKey: false });
+  }, { primaryKey: false });
   reportArticles.associate = (models) => {
     reportArticles.belongsTo(models.users, { foreignKey: 'userid' });
     reportArticles.belongsTo(models.articles, { foreignKey: 'articleid', as: 'article' });

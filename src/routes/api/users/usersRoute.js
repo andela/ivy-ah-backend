@@ -31,13 +31,13 @@ usersRoute.get('/google', passport.authenticate('google', {
   scope: ['profile', 'email']
 }));
 usersRoute.get('/facebookRedirect', passport.authenticate('facebook'), (req, res) => {
-  res.redirect(`${process.env.FRONTEND_URL}?token=${req.user.token}`);
+  res.redirect(`${process.env.FRONTEND_URL}/token/?token=${req.user.token}`);
 });
 usersRoute.get('/twitterRedirect', passport.authenticate('twitter'), (req, res) => {
-  res.redirect(`${process.env.FRONTEND_URL}?token=${req.user.token}`);
+  res.redirect(`${process.env.FRONTEND_URL}/token/?token=${req.user.token}`);
 });
 usersRoute.get('/googleRedirect', passport.authenticate('google'), (req, res) => {
-  res.redirect(`${process.env.FRONTEND_URL}?token=${req.user.token}`);
+  res.redirect(`${process.env.FRONTEND_URL}/token/?token=${req.user.token}`);
 });
 
 export default usersRoute;

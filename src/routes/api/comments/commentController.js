@@ -22,7 +22,7 @@ class Comment {
  * @returns {void}
  */
   static async postComment(req, res, next) {
-    const { body } = req.body;
+    const { body, highlightedText, textPosition } = req.body;
 
     const parentTracker = req.params.parentCommentsId;
     let articleId = req.params.articlesId;
@@ -33,12 +33,27 @@ class Comment {
     }
 
     try {
-      const newComment = await comment.create({
+      const highlight = {
+        highlightedText,
+        textPosition
+      };
+      let newComment = await comment.create({
         articleId,
         parentTracker,
         body,
+        highlight,
         author: req.user.id
       });
+
+      const user = await users.findOne({
+        attributes: { exclude: ['password'] },
+        where: { id: req.user.id },
+      });
+
+      newComment = {
+        ...newComment.toJSON(),
+        user: user.toJSON()
+      };
 
       res.status(201).json({
         comment: newComment,
@@ -97,6 +112,7 @@ class Comment {
         createdAt: oneComment.createdAt,
         updatedAt: oneComment.updatedAt,
         body: oneComment.body,
+        highlight: oneComment.highlight,
         author: {
           username: oneComment.user.username,
           bio: oneComment.user.bio,

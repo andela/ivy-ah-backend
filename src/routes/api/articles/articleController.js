@@ -125,6 +125,7 @@ export default class Article {
         ],
         offset,
         limit,
+        order: [['createdAt', 'DESC']]
       });
       const removeCyclicStructure = JSON.stringify(rows, circularReplacer());
       const newRows = JSON.parse(removeCyclicStructure);
@@ -197,7 +198,7 @@ export default class Article {
         {
           model: comment,
           include: [
-            { model: users, as: 'user', attributes: ['username', 'bio', 'image'] },
+            { model: users, as: 'user', attributes: { exclude: ['password'] } },
             {
               model: commentlikes,
             },

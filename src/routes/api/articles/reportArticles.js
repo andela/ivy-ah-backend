@@ -54,7 +54,8 @@ class ReportArticles {
         include: {
           model: articles,
           as: 'article',
-        }
+        },
+        order: [['createdAt', 'DESC']]
       });
 
       res.status(200).send({ status: 200, data: reported });

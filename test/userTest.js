@@ -228,6 +228,6 @@ describe('Test for update details', () => {
     expect(result).to.have.property('status')
       .to.be.equals(422);
     expect(result.body).to.have.property('error')
-      .to.be.equals('"value" must contain at least one of [username, email, firstname, lastname]');
+      .to.be.equals('"value" must contain at least one of [username, email, firstname, lastname, bio, image]');
   });
 });
