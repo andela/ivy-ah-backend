@@ -117,7 +117,8 @@ class Users {
             attributes: { exclude: ['password'] }
           },
           { model: ratings }
-        ]
+        ],
+        order: [['createdAt', 'DESC']]
       });
       const removeCyclicStructure = JSON.stringify(rows, circularReplacer());
       const newRows = JSON.parse(removeCyclicStructure);

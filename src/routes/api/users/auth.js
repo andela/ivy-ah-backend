@@ -43,7 +43,15 @@ class User {
           password: hashedPassword,
         });
       const token = await authenticator.generateToken({
-        email: user.email, id: user.id, role: user.role
+        email: user.email,
+        id: user.id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        image: user.image,
+        isSubscribed: user.isSubscribed,
+        role: user.role,
+        username: user.username,
+        notification: user.notification
       });
 
       const confirmEmailPage = `${process.env.FRONTEND_URL}confirmation?token=${token}`;
@@ -104,7 +112,15 @@ class User {
       }
 
       const token = await authenticator.generateToken({
-        email: user.email, id: user.id, role: user.role
+        email: user.email,
+        id: user.id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        image: user.image,
+        isSubscribed: user.isSubscribed,
+        role: user.role,
+        username: user.username,
+        notification: user.notification
       });
       return res.status(200).json({
         status: 200,
@@ -129,25 +145,38 @@ class User {
   /**
  * method for checking if user is already registered
  * @param {String} email user email
- * @param {String} username user email
+ * @param {String} username username
+ * @param {String} firstname firstname
+ * @param {String} lastname lastname
+ * @param {String} image image
  * @returns {Boolean} query user
  * @memberof User
  */
-  static async socialAuth(email, username) {
-    const [result] = await db.users
+  static async socialAuth(email, username, firstname, lastname, image) {
+    const [user] = await db.users
       .findAll({
         where: {
           email
         }
       });
-    if (result) {
-      const token = await authenticator.generateToken({ email });
+    if (user) {
+      const token = await authenticator.generateToken({
+        email,
+        id: user.id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        image: user.image,
+        isSubscribed: user.isSubscribed,
+        role: user.role,
+        username: user.username,
+        notification: user.notification
+      });
       const userDetails = {
         email,
         token,
-        username: result.username,
-        bio: result.bio,
-        image: result.image
+        username: user.username,
+        bio: user.bio,
+        image: user.image
       };
       return userDetails;
     }
@@ -158,9 +187,20 @@ class User {
         username,
         email,
         password: hashedPassword,
+        firstname,
+        lastname,
+        image
       });
     const token = await authenticator.generateToken({
-      email: userDetails.email, userid: userDetails.userid, role: userDetails.role
+      email: userDetails.email,
+      id: userDetails.id,
+      firstname: userDetails.firstname,
+      lastname: userDetails.lastname,
+      image: userDetails.image,
+      isSubscribed: userDetails.isSubscribed,
+      role: userDetails.role,
+      username: userDetails.username,
+      notification: userDetails.notification
     });
     return { username, email, token };
   }

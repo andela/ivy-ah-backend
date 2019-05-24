@@ -65,7 +65,8 @@ const searchArticles = async ({ body }, res) => {
       where: {
         ...tags,
         ...keyword,
-      }
+      },
+      order: [['createdAt', 'DESC']]
     });
 
     res.status(200).send({ status: 200, parameters: body, data: searchResults });

@@ -28,6 +28,8 @@ const body = joi.string();
 const tagList = joi.array();
 const plainText = joi.string();
 const bannerImage = joi.string();
+const image = joi.string();
+const bio = joi.string().max(100);
 
 const articleId = joi.string().guid().required()
   .error(() => 'We do not know the article you are referring to. Please provide a valid article id');
@@ -56,9 +58,11 @@ const updateSchema = joi.object().keys({
   username,
   firstname,
   lastname,
+  bio,
+  image,
   email: joi.string().email()
     .error(() => 'email must be in the format john@example.com')
-}).or('username', 'email', 'firstname', 'lastname');
+}).or('username', 'email', 'firstname', 'lastname', 'bio', 'image');
 
 const reason = joi.string()
   .error(() => 'reason must be a string').required();

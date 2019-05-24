@@ -1,6 +1,6 @@
 import db from '../../../models';
 
-const { bookmark, articles } = db;
+const { bookmark, articles, users } = db;
 /**
  *contains static methods for adding, removing
  *and getting bookmarks
@@ -97,9 +97,14 @@ class Bookmark {
         attributes: ['article'],
         include: {
           model: articles,
-          as: 'articleDetail'
+          as: 'articleDetail',
+          include: {
+            model: users,
+            attributes: ['firstname', 'lastname', 'image']
+          }
         },
-        where: { user }
+        where: { user },
+        order: [['createdAt', 'DESC']]
       });
       return res.status(200).json({
         status: 200,
