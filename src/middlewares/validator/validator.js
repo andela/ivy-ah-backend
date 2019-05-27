@@ -30,6 +30,8 @@ const plainText = joi.string();
 const bannerImage = joi.string();
 const image = joi.string();
 const bio = joi.string().max(100);
+const isPremium = joi.boolean();
+const isPublished = joi.boolean();
 
 const articleId = joi.string().guid().required()
   .error(() => 'We do not know the article you are referring to. Please provide a valid article id');
@@ -81,7 +83,9 @@ const schemas = {
     description,
     body,
     tagList,
-    plainText
+    plainText,
+    isPremium,
+    isPublished
   }).and('body', 'plainText').error(() => 'body and plainText field must be present'),
   articles: joi.object().keys({
     title: title.required(),
@@ -89,7 +93,9 @@ const schemas = {
     body: body.required(),
     tagList: tagList.required(),
     plainText: title.required(),
-    bannerImage
+    bannerImage,
+    isPublished: isPublished.required(),
+    isPremium,
   }),
   forgotPassword: joi.object().keys({ email, url }),
   resendMail: joi.object().keys({ email }),

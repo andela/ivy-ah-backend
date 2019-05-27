@@ -125,6 +125,7 @@ export default class Article {
         ],
         offset,
         limit,
+        where: { isPublished: true },
         order: [['createdAt', 'DESC']]
       });
       const removeCyclicStructure = JSON.stringify(rows, circularReplacer());

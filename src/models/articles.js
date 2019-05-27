@@ -48,6 +48,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false
     },
+    isPublished: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
     authorLastSeen: {
       type: DataTypes.DATE,
       defaultValue: Sequelize.fn('NOW'),
