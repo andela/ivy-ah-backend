@@ -15,25 +15,25 @@ const convertToArray = string => string.match(/\w+/g).map(str => `%${str}%`);
  * @param {Response} res respont object
  * @returns {Void} void
  */
-const searchArticles = async ({ body }, res) => {
+const searchArticles = async ({ query }, res) => {
   try {
-    const tags = body.tags ? {
+    const tags = query.tags ? {
       tagList: {
-        [Op.overlap]: body.tags,
+        [Op.overlap]: query.tags,
       }
     } : {};
 
-    const keyword = body.keyword ? {
+    const keyword = query.keyword ? {
       slug: {
         [Op.iLike]: {
-          [Op.any]: convertToArray(body.keyword)
+          [Op.any]: convertToArray(query.keyword)
         }
       }
     } : {};
 
     const attributes = ['email', 'bio', 'image'];
 
-    const author = body.author ? {
+    const author = query.author ? {
       include: {
         model: users,
         as: 'userId',
@@ -43,14 +43,14 @@ const searchArticles = async ({ body }, res) => {
             {
               first_name: {
                 [Op.iLike]: {
-                  [Op.any]: convertToArray(body.author)
+                  [Op.any]: convertToArray(query.author)
                 }
               },
             },
             {
               last_name: {
                 [Op.iLike]: {
-                  [Op.any]: convertToArray(body.author)
+                  [Op.any]: convertToArray(query.author)
                 }
               }
             }
@@ -69,7 +69,7 @@ const searchArticles = async ({ body }, res) => {
       order: [['createdAt', 'DESC']]
     });
 
-    res.status(200).send({ status: 200, parameters: body, data: searchResults });
+    res.status(200).send({ status: 200, parameters: query, data: searchResults });
   } catch (error) {
     res.status(500).send('something really bad happened');
   }

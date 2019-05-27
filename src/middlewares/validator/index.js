@@ -139,7 +139,7 @@ class Validate {
   * @memberof validate
   */
   static validateArticleSearch(req, res, next) {
-    validator(req.body, 'articleSearch').then(() => next())
+    validator(req.query, 'articleSearch').then(() => next())
       .catch(error => res.status(422).json({
         status: 422, error,
       }));

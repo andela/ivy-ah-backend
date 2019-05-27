@@ -30,13 +30,14 @@ export default class Article {
   static async createArticle(request, response, next) {
     try {
       const {
-        title, body, description, tagList, plainText, bannerImage
+        title, body, description, tagList, plainText, bannerImage, isPublished
       } = request.body;
       const result = await articles.create({
         title,
         body,
         description,
         plainText,
+        isPublished,
         bannerImage,
         author: request.user.id,
         slug: generateSlug(title),

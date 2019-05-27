@@ -94,7 +94,7 @@ const schemas = {
     tagList: tagList.required(),
     plainText: title.required(),
     bannerImage,
-    isPublished: isPublished.required(),
+    isPublished,
     isPremium,
   }),
   forgotPassword: joi.object().keys({ email, url }),

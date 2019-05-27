@@ -54,7 +54,7 @@ class User {
         notification: user.notification
       });
 
-      const confirmEmailPage = `${process.env.FRONTEND_URL}confirmation?token=${token}`;
+      const confirmEmailPage = `${process.env.FRONTEND_URL}/token/?token=${token}`;
 
       await emailSender(email, 'Please Confirm Your Email', Templates.confirmEmail(confirmEmailPage, email));
       return response.status(201).json({
