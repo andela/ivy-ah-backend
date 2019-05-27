@@ -1,7 +1,9 @@
 import moment from 'moment';
 import db from '../../../models';
 
-const { ReadArticles, articles, Sequelize } = db;
+const {
+  ReadArticles, articles, Sequelize, users
+} = db;
 
 const { Op } = Sequelize;
 
@@ -35,8 +37,14 @@ export default class ReadingStats {
         include: [
           {
             model: articles,
-            as: 'article'
-          }
+            as: 'article',
+            include: {
+              model: users,
+              attributes: {
+                exclude: ['password']
+              }
+            }
+          },
         ],
         order: [['createdAt', 'DESC']]
       });

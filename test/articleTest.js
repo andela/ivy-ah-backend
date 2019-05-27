@@ -90,7 +90,7 @@ describe('artilce search', () => {
       })
       .expect(201);
 
-    const result = await server.get('/api/v1/articles/search').send({
+    const result = await server.post('/api/v1/articles/search').send({
       tags: ['thoisfd']
     }).expect(200);
     expect(result.status).to.equal(200);
@@ -100,7 +100,7 @@ describe('artilce search', () => {
   });
 
   it('return an error on failed validation', async () => {
-    const result = await server.get('/api/v1/articles/search').send({
+    const result = await server.post('/api/v1/articles/search').send({
       keyword: 15
     }).expect(422);
     expect(result.status).to.equal(422);

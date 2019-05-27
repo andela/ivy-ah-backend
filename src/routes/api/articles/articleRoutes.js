@@ -19,7 +19,7 @@ const { rateArticleHandler, getRatings } = rating;
 const articleRoute = Router();
 
 articleRoute.post('/', authenticator, validateArticle, createArticle);
-articleRoute.get('/search', validateArticleSearch, searchArticles);
+articleRoute.post('/search', validateArticleSearch, searchArticles);
 articleRoute.put('/likes/:articleId/:option', authenticator, validateArticleLikes, likeController);
 
 
